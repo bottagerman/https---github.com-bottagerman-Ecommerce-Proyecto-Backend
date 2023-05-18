@@ -4,7 +4,7 @@ import fs from "fs";
 
 //PRODUCT MANAGER 
 
-export class ProductManager {
+ class ProductManager {
     #path;
     constructor(path) {
       this.products = [];
@@ -49,13 +49,14 @@ export class ProductManager {
       }
     }
   
-    addProduct(title, description, price, thumbnail, stock, code) {
+    addProduct(title, description, price, category, thumbnail, stock, code) {
       this.products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
   
       if (
         !title ||
         !description ||
         !price ||
+        !category ||
         !thumbnail ||
         !stock ||
         !code ||
@@ -69,6 +70,7 @@ export class ProductManager {
           title,
           description,
           price,
+          category,
           thumbnail,
           stock,
           code,
@@ -106,10 +108,14 @@ export class ProductManager {
       }
     }
   }
-  const product = new ProductManager("./products.json");
+  export const product = new ProductManager("./products.json");
 
   product.addProduct("Gibson Les Paul", "Gibson Les Paul signature 1990", 7000, "no iamge", 2, "aa23")
+  product.addProduct("Fender Stratocaster", "Fender Stratocaster 69's relic", 8000, "no image", 1, "al23")
+  product.addProduct("Kramer Baretta", "Kramer Baretta Pappo's signature", 3500, "guitar", "no image", 3, "ap200" )
 
+// CART MANAGER
 
-
-
+class CartManager {
+    
+}
