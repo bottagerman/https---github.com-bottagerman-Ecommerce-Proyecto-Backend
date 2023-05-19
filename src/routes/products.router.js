@@ -1,7 +1,16 @@
-//@ts-check
 import express from "express";
 import { product } from "../../utils.js";
 export const routerProducts = express.Router();
+
+// POST NEW PRODUCT
+
+routerProducts.post("/", async, (req, res) =>{
+  const productCreated = req.body;
+  productCreated.id = ((Math.random() * 1000000).toFixed(0) )
+
+
+})
+
 
 // GET ALL PRODUCTS AND SET LIMIT
 
