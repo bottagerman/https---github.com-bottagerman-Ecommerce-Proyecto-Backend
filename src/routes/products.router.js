@@ -6,9 +6,9 @@ export const routerProducts = express.Router();
 
 routerProducts.post("/", async, (req, res) =>{
   const productCreated = req.body;
-  productCreated.id = ((Math.random() * 1000000).toFixed(0) )
-
-
+  productCreated.date = Date.now()
+  product.push(productCreated)
+  return res.status(200).send({status: "success", data: productCreated})
 })
 
 
