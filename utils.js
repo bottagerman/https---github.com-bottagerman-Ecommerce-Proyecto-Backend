@@ -158,7 +158,7 @@ class CartManager {
   }
   addCart(product, cId) {
     this.cart = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    const cId = {id: this.#generateId}
+    const id = {id: this.#generateId}
     const newProductCart = {
         product: product,
       };
@@ -166,4 +166,4 @@ class CartManager {
       fs.writeFileSync(this.#path, JSON.stringify(this.cart));
     }
 }
-export const cart = new CartManager("./cart.json")
+ export const cart = new CartManager("./cart.json")

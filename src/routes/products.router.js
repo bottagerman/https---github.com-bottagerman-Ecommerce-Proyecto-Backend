@@ -4,7 +4,7 @@ export const routerProducts = express.Router();
 
 // POST NEW PRODUCT
 
-routerProducts.post("/", async, (req, res) =>{
+routerProducts.post("/",  (req, res) =>{
   const productCreated = req.body;
   productCreated.date = Date.now()
   product.push(productCreated)
