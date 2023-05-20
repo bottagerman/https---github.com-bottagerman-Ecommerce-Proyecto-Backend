@@ -4,7 +4,7 @@ import fs from "fs";
 
 //PRODUCT MANAGER
 
-class ProductManager {
+export class ProductManager {
   #path;
   constructor(path) {
     this.products = [];
@@ -31,7 +31,7 @@ class ProductManager {
   getProductById(id) {
     this.products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
 
-    const productFound = this.products.find((p) => p.id === Number(id));
+    const productFound = this.products.find((p) => p.id === id);
     if (!productFound) {
       return undefined;
     } else {
@@ -80,61 +80,44 @@ class ProductManager {
       fs.writeFileSync(this.#path, JSON.stringify(this.products));
     }
   }
+  writeDataToFile() {
+    fs.writeFileSync(this.#path, JSON.stringify(this.products));
+  }
 
   deleteProduct(id) {
     this.products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    if (this.products.find((p) => p.id === id)) {
-      this.products.splice(
-        this.products.indexOf(this.products.find((p) => p.id === id)),
-        1
-      );
+    const productExists = this.products.find((p) => p.id === id);
+    if (productExists) {
+      const deletedProduct = this.products.find((p) => p.id === id);
+      this.products.splice(this.products.indexOf(deletedProduct), 1);
       fs.writeFileSync(this.#path, JSON.stringify(this.products));
-      return console.log("Product deleted successfully");
+      return deletedProduct;
     } else {
-      return console.log("Product not found");
+      return undefined;
     }
   }
 
-  updateProduct(id, key, value) {
-    if (key == id) {
-      return console.log("You cannot change the id field");
-    } else if (this.products.find((p) => p.id === id)) {
-      const found = this.products.find((p) => p.id === id);
-      found[key] = value;
-      fs.writeFileSync(this.#path, JSON.stringify(this.products));
-      return console.log("Updated product", found);
-    } else {
-      return console.log("Product not found ");
+  updateProduct(id, newData) {
+    const index = this.products.findIndex((p) => p.id === id);
+
+    if (index === -1) {
+      return null;
     }
+
+    const updatedProduct = {
+      ...this.products[index],
+      ...newData,
+      id: this.products[index].id,
+    };
+
+    this.products[index] = updatedProduct;
+    fs.writeFileSync(this.#path, JSON.stringify(this.products));
+
+    return updatedProduct;
   }
 }
 export const product = new ProductManager("./products.json");
 
-product.addProduct(
-  "Gibson Les Paul",
-  "Gibson Les Paul signature 1990",
-  7000,
-  "no iamge",
-  2,
-  "aa23"
-);
-product.addProduct(
-  "Fender Stratocaster",
-  "Fender Stratocaster 69's relic",
-  8000,
-  "no image",
-  1,
-  "al23"
-);
-product.addProduct(
-  "Kramer Baretta",
-  "Kramer Baretta Pappo's signature",
-  3500,
-  "guitar",
-  "no image",
-  3,
-  "ap200"
-);
 
 // CART MANAGER
 
@@ -158,12 +141,12 @@ class CartManager {
   }
   addCart(product, cId) {
     this.cart = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-    const id = {id: this.#generateId}
+    const id = { id: this.#generateId };
     const newProductCart = {
-        product: product,
-      };
-      this.cart.push(newProductCart, cId)
-      fs.writeFileSync(this.#path, JSON.stringify(this.cart));
-    }
+      product: product,
+    };
+    this.cart.push(newProductCart, cId);
+    fs.writeFileSync(this.#path, JSON.stringify(this.cart));
+  }
 }
- export const cart = new CartManager("./cart.json")
+export const cart = new CartManager("./cart.json");

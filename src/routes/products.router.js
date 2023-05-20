@@ -4,13 +4,16 @@ export const routerProducts = express.Router();
 
 // POST NEW PRODUCT
 
-routerProducts.post("/",  (req, res) =>{
-  const productCreated = req.body;
-  productCreated.date = Date.now()
-  product.push(productCreated)
-  return res.status(200).send({status: "success", data: productCreated})
-})
-
+routerProducts.post("/", (req, res) => {
+  let newProduct = req.body;
+  newProduct.status = true;
+  newProduct.date = Date.now();
+  newProduct.id = (Math.random() * 10000000).toFixed(0);
+  product.addProduct(newProduct);
+  product.products.push(newProduct);
+  product.writeDataToFile();
+  return res.status(200).send({ status: "success", data: newProduct });
+});
 
 // GET ALL PRODUCTS AND SET LIMIT
 
@@ -37,10 +40,10 @@ routerProducts.get("/", async (req, res) => {
 
 // GET PRODUCTS BY ID
 
-routerProducts.get("/:pId", async (req, res) => {
+routerProducts.get("/:id", async (req, res) => {
   try {
-    const { pId } = req.params;
-    const productId = await product.getProductById(pId);
+    const { id } = req.params;
+    const productId = await product.getProductById(id);
     if (!productId) {
       res
         .status(404)
@@ -55,18 +58,20 @@ routerProducts.get("/:pId", async (req, res) => {
 
 // DELETE PRODUCT
 
-routerProducts.delete("/:pId", async (req, res) => {
+routerProducts.delete("/:id", async (req, res) => {
   try {
-    const { pId } = req.params;
-    const deletedProduct = await product.deleteProduct(pId);
+    const { id } = req.params;
+    const deletedProduct = await product.deleteProduct(id);
     if (!deletedProduct) {
       res
         .status(404)
         .send({ status: "Error", msg: "Oooops! Product not found" });
     } else {
-      res
-        .status(200)
-        .send({ status: "success", msg: "Product deleted successfully" });
+      res.status(200).send({
+        status: "success",
+        msg: "Product deleted successfully",
+        data: deletedProduct,
+      });
     }
   } catch (error) {
     res.status(401).send(error);
@@ -75,29 +80,28 @@ routerProducts.delete("/:pId", async (req, res) => {
 
 // CHANGE PRODUCT FIELD
 
-routerProducts.put("/:pId", (req, res) => {
-    try {
-      const { pId } = req.params;
-      const newData = req.body;
-      const updatedProduct = product.updateProduct(pId, newData);
-      if (!updatedProduct) {
-        return res.status(404).json({
-          status: "error",
-          msg: "Oooops! Product not found",
-          data: {},
-        });
-      }
-      return res.status(200).json({
-        status: "success",
-        msg: "Product updated successfully",
-        data: updatedProduct,
-      });
-    } catch (error) {
-      res.status(500).json({
+routerProducts.put("/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const newData = req.body;
+    const updatedProduct = product.updateProduct(id, newData);
+    if (!updatedProduct) {
+      return res.status(404).json({
         status: "error",
-        msg: "Internal server error",
+        msg: "Oooops! Product not found",
         data: {},
       });
     }
-  });
-  
+    return res.status(200).json({
+      status: "success",
+      msg: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      msg: "Internal server error",
+      data: {},
+    });
+  }
+});

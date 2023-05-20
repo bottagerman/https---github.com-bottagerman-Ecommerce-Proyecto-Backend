@@ -1,7 +1,7 @@
 //@ts-check
 import express from "express";
 import { cart } from "../../utils.js";
-import { product } from "../../utils.js";
+import { ProductManager } from "../../utils.js";
 export const routerCart = express.Router();
 
 // CART 
