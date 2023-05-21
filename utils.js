@@ -174,9 +174,6 @@ class CartManager {
       const fileCartsParse = JSON.parse(fileCarts);
       this.cart = fileCartsParse;
 
-      productId = parseInt(productId);
-      cartId = parseInt(cartId);
-
       const allProducts = await product.getProducts();
       const productFound = allProducts.find(
         (product) => product.id === productId
