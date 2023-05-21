@@ -1,9 +1,8 @@
 import express from "express";
-import { product } from "../../utils.js";
+import { product, cart } from "../../utils.js";
 export const routerProducts = express.Router();
 
 // POST NEW PRODUCT
-
 routerProducts.post("/", (req, res) => {
   let newProduct = req.body;
   newProduct.status = true;
@@ -16,7 +15,6 @@ routerProducts.post("/", (req, res) => {
 });
 
 // GET ALL PRODUCTS AND SET LIMIT
-
 routerProducts.get("/", async (req, res) => {
   try {
     const allProducts = await product.getProducts();
@@ -39,7 +37,6 @@ routerProducts.get("/", async (req, res) => {
 });
 
 // GET PRODUCTS BY ID
-
 routerProducts.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,7 +54,6 @@ routerProducts.get("/:id", async (req, res) => {
 });
 
 // DELETE PRODUCT
-
 routerProducts.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -79,7 +75,6 @@ routerProducts.delete("/:id", async (req, res) => {
 });
 
 // CHANGE PRODUCT FIELD
-
 routerProducts.put("/:id", (req, res) => {
   try {
     const { id } = req.params;
@@ -105,3 +100,5 @@ routerProducts.put("/:id", (req, res) => {
     });
   }
 });
+
+

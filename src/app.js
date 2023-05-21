@@ -10,8 +10,8 @@ app.use(express.urlencoded({extended:true}))
 
 // ALL MY ENDPOINTS 
 
-app.use("/products", routerProducts);
-app.use("/cart", routerCart)
+app.use("/api/products", routerProducts);
+app.use("/api/cart", routerCart)
 
 app.get("*", (req, res) => {
     return res.status(404).json({
