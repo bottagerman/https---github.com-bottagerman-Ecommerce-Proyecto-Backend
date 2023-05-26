@@ -1,28 +1,34 @@
 //@ts-check
-
 import express from "express";
 import { routerProducts } from "./routes/products.router.js";
 import { routerCart } from "./routes/cart.router.js";
-const app = express ();
-const port = 8080; 
+import { routerProductsView } from "./routes/products.view.router.js";
+const app = express();
+const port = 8080;
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }));
 
-// ALL MY ENDPOINTS 
+// ALL MY API ENDPOINTS
 
 app.use("/api/products", routerProducts);
-app.use("/api/cart", routerCart)
+app.use("/api/cart", routerCart);
+
+// ALL MY HTLM ENDPOINTS 
+
+app.use("/view/products", routerProductsView);
+
+// GLOBAL ENDPOINT
 
 app.get("*", (req, res) => {
-    return res.status(404).json({
-        status: "error",
-        msg: "Ooops, page not found!",
-        data: {},
-    })
-})
+  return res.status(404).json({
+    status: "error",
+    msg: "Ooops, page not found!",
+    data: {},
+  });
+});
 
 //APP LISTENER
 
-app.listen(port, ( ) => {
-    console.log(`Example app listening on port ${port}`)
-})
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});

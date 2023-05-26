@@ -1,5 +1,5 @@
 import express from "express";
-import { cart, product } from "../../utils.js";
+import { cart } from "../handlers/cartManager.js";
 import { routerProducts } from "./products.router.js";
 export const routerCart = express.Router();
 routerCart.use("/products", routerProducts);
