@@ -4,6 +4,7 @@ import { routerProducts } from "./routes/products.router.js";
 import { routerCart } from "./routes/cart.router.js";
 import { routerProductsView } from "./routes/products.view.router.js";
 import { __dirname } from "./utils.js";
+import { Server } from "socket.io";
 
 const app = express();
 const port = 8080;
@@ -15,14 +16,14 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-// PUBLIC FILES 
+// PUBLIC FILES
 app.use(express.static(__dirname + "/public"));
 
 // ALL MY API ENDPOINTS
 app.use("/api/products", routerProducts);
 app.use("/api/cart", routerCart);
 
-// ALL MY HTLM ENDPOINTS 
+// ALL MY HTLM ENDPOINTS
 app.use("/views/products", routerProductsView);
 
 // GLOBAL ENDPOINT
@@ -34,7 +35,14 @@ app.get("*", (req, res) => {
   });
 });
 
-//APP LISTENER
-app.listen(port, () => {
+// APP LISTENER
+const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+});
+
+// SOCKET SERVER
+const socketServer = new Server(httpServer);
+
+socketServer.on("connection", (socket) => {
+  socket.emit("msg_server_to_front", { author: "server", msg: "bienvenidos!" });
 });
