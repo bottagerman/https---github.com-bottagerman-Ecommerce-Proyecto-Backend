@@ -12,5 +12,5 @@ routerProductsView.get("/", async (req, res) => {
 // GET PRODUCTS IN REAL TIME 
 
 routerProductsView.get("/realtimeproducts", (req, res) => {
-  return res.render("realTimeProducts", {}) 
+  return res.render("realTimeProducts", { allProducts: product.getProducts()}) 
 })

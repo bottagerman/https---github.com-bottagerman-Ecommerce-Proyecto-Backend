@@ -1,9 +1,44 @@
+
 <div>
-    <h1>
-        Product list : {{Product}}
-    </h1>
-    <p>
-        hola gola golh
-        aoa
-    </p>
+  <h1>Create a New Product</h1>
+  <form action="/api/products" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" required>
+
+    <label for="thumbnail">Thumbnail:</label>
+    <input type="text" id="thumbnail" name="thumbnail" required>
+
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" required>
+
+    <label for="code">Code:</label>
+    <input type="text" id="code" name="code" required>
+
+    <button type="submit">Create</button>
+  </form>
 </div>
+
+<div>
+  <h2>All our products!</h2>
+  {{#each allProducts}}
+    <div style="width: 250px; padding: 15px; border: solid 3px; margin: 15px;">
+      <p>{{this.title}}</p>
+      <p>{{this.description}}</p>
+      <p>price:{{this.price}}</p>
+      <p>stock:{{this.stock}}</p>
+    </div>
+  {{/each}}
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+

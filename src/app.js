@@ -1,5 +1,6 @@
 import express from "express";
 import handlebars from "express-handlebars";
+import { product } from "./handlers/productManger.js";
 import { routerProducts } from "./routes/products.router.js";
 import { routerCart } from "./routes/cart.router.js";
 import { routerProductsView } from "./routes/products.view.router.js";
@@ -41,8 +42,29 @@ const httpServer = app.listen(port, () => {
 });
 
 // SOCKET SERVER
+
 const socketServer = new Server(httpServer);
 
 socketServer.on("connection", (socket) => {
-  socket.emit("msg_server_to_front", { author: "server", msg: "bienvenidos!" });
+  const products = product.getProducts();
+  socket.emit("products", { products });
+});
+
+socketServer.on("connection", (socket) => {
+  const products = product.getProducts();
+  socket.emit("products", products);
+
+  socket.on("addProduct", (data) => {
+    product.addProduct(
+      data.title,
+      data.description,
+      data.price,
+      data.category,
+      data.thumbnail,
+      data.stock,
+      data.code
+    );
+    const updatedProducts = product.getProducts();
+    socketServer.emit("products", updatedProducts);
+  });
 });
