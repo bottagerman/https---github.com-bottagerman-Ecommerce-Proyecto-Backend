@@ -1,13 +1,17 @@
 <div>
-    <h1>
-        Our products in real time! 
-    </h1>
-    <div>
-        <ul id= "productsUl">
-
-        </ul>
-    </div>
-
+  <h1>
+    Our products in real time!
+  </h1>
+  <div>
+    <ul id="productsUl">
+      {{#each allProducts}}
+        <li>
+          <h3>{{this.title}}</h3>
+          <p>{{this.description}}</p>
+          <p>price:{{this.price}}</p>
+          <p>stock:{{this.stock}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </div>
- <script src="/socket.io/socket.io.js"></script>
- <script src="../../public/index.js"></script>

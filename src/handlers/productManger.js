@@ -112,5 +112,17 @@ export class ProductManager {
   
       return updatedProduct;
     }
+
+     getUpdatedProducts() {
+      const products = this.getProducts();
+      const updatedProducts = [];
+      for (const product of products) {
+        if (product.isUpdated) {
+          updatedProducts.push(product);
+        }
+      }
+      return updatedProducts;
+    }
+    
   }
   export const product = new ProductManager("./products.json");

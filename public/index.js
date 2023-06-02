@@ -1,18 +1,21 @@
 const socket = io();
 
+const productsIrl = document.createElement("ul");
+
 socket.on("products", (products) => {
-  let productsIrl = document.getElementById("productsUl");
   productsIrl.innerHTML = "";
 
   products.forEach((element) => {
-    productsIrl.innerHTML += `<div style="width: 250px; padding: 15px; border: solid 3px; margin: 15px;">
-    <p>${element.title}</p>
+    productsIrl.innerHTML += `<li>
+    <h3>${element.title}</h3>
     <p>${element.description}</p>
-    <p>${element.price}</p>
-    </div>`;
+    <p>price:${element.price}</p>
+    <p>stock:${element.stock}</p>
+    </li>`;
   });
 });
- // FORM FOR ADD IRL PRODUCT
+
+// FORM FOR ADD IRL PRODUCT
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("productForm");
   const inputs = form.querySelectorAll("input[type='text']");
@@ -31,4 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+});
+
+socket.on("products", (products) => {
+  const productsUl = document.getElementById("productsUl");
+  productsUl.innerHTML = products.map(product => `
+    <li>
+      <h3>${product.title}</h3>
+      <p>${product.description}</p>
+      <p>price:${product.price}</p>
+      <p>stock:${product.stock}</p>
+    </li>`).join("");
 });

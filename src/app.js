@@ -5,10 +5,14 @@ import { routerProducts } from "./routes/products.router.js";
 import { routerCart } from "./routes/cart.router.js";
 import { routerProductsView } from "./routes/products.view.router.js";
 import { __dirname } from "./utils.js";
+import { createServer } from "http";
 import { Server } from "socket.io";
 
 const app = express();
 const port = 8080;
+const httpServer = createServer(app);
+const socketServer = new Server(httpServer);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,35 +28,23 @@ app.use(express.static(__dirname + "/public"));
 app.use("/api/products", routerProducts);
 app.use("/api/cart", routerCart);
 
-// ALL MY HTLM ENDPOINTS
+// ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
 
 // GLOBAL ENDPOINT
 app.get("*", (req, res) => {
   return res.status(404).json({
     status: "error",
-    msg: "Ooops, page not found!",
+    msg: "Oops, page not found!",
     data: {},
   });
 });
 
-// APP LISTENER
-const httpServer = app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
-
-// SOCKET SERVER
-
-const socketServer = new Server(httpServer);
-
 socketServer.on("connection", (socket) => {
-  const products = product.getProducts();
-  socket.emit("products", { products });
-});
-
-socketServer.on("connection", (socket) => {
-  const products = product.getProducts();
-  socket.emit("products", products);
+  const updatedProducts = product.getUpdatedProducts();
+  if (updatedProducts.length > 0) {
+    socket.emit("products", updatedProducts);
+  }
 
   socket.on("addProduct", (data) => {
     product.addProduct(
@@ -67,4 +59,8 @@ socketServer.on("connection", (socket) => {
     const updatedProducts = product.getProducts();
     socketServer.emit("products", updatedProducts);
   });
+});
+
+httpServer.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
