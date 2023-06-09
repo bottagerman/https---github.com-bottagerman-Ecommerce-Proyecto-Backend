@@ -1,5 +1,5 @@
 import express from "express";
-import { cart } from "../handlers/cartManager.js";
+import { cart } from "../DAO/handlers/cartManager.js";
 import { routerProducts } from "./products.router.js";
 export const routerCart = express.Router();
 routerCart.use("/products", routerProducts);

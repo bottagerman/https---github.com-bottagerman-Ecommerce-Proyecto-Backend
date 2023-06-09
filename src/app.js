@@ -1,15 +1,21 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import { product } from "./handlers/productManger.js";
+import { product } from "./DAO/handlers/productManger.js";
 import { routerProducts } from "./routes/products.router.js";
 import { routerCart } from "./routes/cart.router.js";
+import { routerUsers } from "./routes/users.router.js";
 import { routerProductsView } from "./routes/products.view.router.js";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/path.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { connectMongo } from "./utils/connections.js";
 
 const app = express();
 const port = 8080;
+
+//CONNECTION TO THE MONGO DB
+connectMongo()
+
 const httpServer = createServer(app);
 const socketServer = new Server(httpServer);
 
@@ -27,6 +33,7 @@ app.use(express.static(__dirname + "/public"));
 // ALL MY API ENDPOINTS
 app.use("/api/products", routerProducts);
 app.use("/api/cart", routerCart);
+app.use("/api/users", routerUsers);
 
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);

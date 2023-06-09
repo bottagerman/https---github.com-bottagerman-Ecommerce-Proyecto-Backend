@@ -1,5 +1,7 @@
+//@ts-check
+
 import express from "express";
-import { product } from "../handlers/productManger.js";
+import { product } from "../DAO/handlers/productManger.js";
 export const routerProducts = express.Router();
 
 // POST NEW PRODUCT
@@ -100,5 +102,3 @@ routerProducts.put("/:id", (req, res) => {
     });
   }
 });
-
-
