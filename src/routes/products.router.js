@@ -1,104 +1,74 @@
 //@ts-check
 
 import express from "express";
-import { product } from "../DAO/handlers/productManger.js";
+//import { product } from "../DAO/handlers/productManger.js";
+import { ProductManagerMongo } from "../services/products.services.js";
 export const routerProducts = express.Router();
 
+const productManagerMongo = new ProductManagerMongo();
+
 // POST NEW PRODUCT
-routerProducts.post("/", (req, res) => {
+routerProducts.post("/", async (req, res) => {
   let newProduct = req.body;
-  newProduct.status = true;
-  newProduct.date = Date.now();
-  newProduct.id = (Math.random() * 10000000).toFixed(0);
-  product.addProduct(newProduct);
-  product.products.push(newProduct);
-  product.writeDataToFile();
-  return res.status(200).send({ status: "success", data: newProduct });
+  try {
+    const addProduct = await productManagerMongo.addProduct(newProduct);
+    res.status(201).send({ status: "success", data: addProduct });
+  } catch (error) {
+    res.status(400).send({
+      status: "error",
+      data: error.message,
+    });
+  }
 });
 
-// GET ALL PRODUCTS AND SET LIMIT
+// GET ALL PRODUCTS
 routerProducts.get("/", async (req, res) => {
   try {
-    const allProducts = await product.getProducts();
-    const consulta = req.query;
-    const setLimit = Object.keys(consulta).length;
-    if (setLimit == 0) {
-      res.status(200).send({
-        status: "success",
-        msg: "Showing all my products",
-        data: allProducts,
-      });
-    } else {
-      res
-        .status(200)
-        .send({ status: "success", data: allProducts.slice(0, setLimit) });
-    }
+    const allProducts = productManagerMongo.getProducts();
+
+    res.status(200).send({ status: "success", data: allProducts });
   } catch (error) {
-    res.status(401).send(error);
+    res.status(400).send({ status: "error", error: error.message });
   }
 });
 
 // GET PRODUCTS BY ID
-routerProducts.get("/:id", async (req, res) => {
+routerProducts.get("/:pid", async (req, res) => {
   try {
-    const { id } = req.params;
-    const productId = await product.getProductById(id);
-    if (!productId) {
-      res
-        .status(404)
-        .send({ status: "Error", msg: "Oooops! Product not found" });
-    } else {
-      res.status(200).send({ status: "success", data: productId });
-    }
+    let pid = req.params.pid;
+    const findProduct = await productManagerMongo.getProductById(pid);
   } catch (error) {
     res.status(401).send(error);
   }
 });
 
 // DELETE PRODUCT
-routerProducts.delete("/:id", async (req, res) => {
+routerProducts.delete("/:pid", async (req, res) => {
+  let pid = req.params.pid;
+  console.log(pid);
+
   try {
-    const { id } = req.params;
-    const deletedProduct = await product.deleteProduct(id);
-    if (!deletedProduct) {
-      res
-        .status(404)
-        .send({ status: "Error", msg: "Oooops! Product not found" });
-    } else {
-      res.status(200).send({
-        status: "success",
-        msg: "Product deleted successfully",
-        data: deletedProduct,
-      });
-    }
+    const deleteProduct = await productManagerMongo.deleteProduct(pid);
+    res.status(200).send({
+      status: "success",
+      data: "Product deleted:" + deleteProduct,
+    });
   } catch (error) {
-    res.status(401).send(error);
+    res.status(400).send({ status: "error", data: error.message });
   }
 });
 
 // CHANGE PRODUCT FIELD
-routerProducts.put("/:id", (req, res) => {
+routerProducts.put("/:pid", async (req, res) => {
+  let updateProductClient = req.body;
+  let pid = req.params.pid;
   try {
-    const { id } = req.params;
-    const newData = req.body;
-    const updatedProduct = product.updateProduct(id, newData);
-    if (!updatedProduct) {
-      return res.status(404).json({
-        status: "error",
-        msg: "Oooops! Product not found",
-        data: {},
-      });
-    }
-    return res.status(200).json({
-      status: "success",
-      msg: "Product updated successfully",
-      data: updatedProduct,
-    });
+    const updateProduct = await productManagerMongo.updateProduct(
+      pid,
+      updateProductClient
+    );
+    res.status(200).send({ status: "success", data: updateProduct });
   } catch (error) {
-    res.status(500).json({
-      status: "error",
-      msg: "Internal server error",
-      data: {},
-    });
+    res.status(400).send({ status: "error", data: error.message });
   }
 });
