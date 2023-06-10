@@ -1,4 +1,4 @@
-import { cartModel } from "../models/cart.model.js";
+import { cartModel } from "../DAO/models/cart.models.js";
 import { ProductManagerMongo } from "./products.services.js";
 
 const productManagerMongo = new ProductManagerMongo();
