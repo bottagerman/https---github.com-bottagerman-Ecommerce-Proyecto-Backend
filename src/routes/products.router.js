@@ -16,7 +16,7 @@ routerProducts.post("/", async (req, res) => {
   } catch (error) {
     res.status(400).send({
       status: "error",
-      data: error.message,
+      data: "Error creating a new product",
     });
   }
 });

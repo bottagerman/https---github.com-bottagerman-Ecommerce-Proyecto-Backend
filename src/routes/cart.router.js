@@ -16,7 +16,7 @@ routerCart.post("/", async (req, res) => {
     const userCart = await cartManagerMongo.createCart();
     res.status(201).send({ status: "success", data: userCart });
   } catch (error) {
-    res.status(400).send({ status: "error", error: "Cart not created" });
+    res.status(400).send({ status: "error", error: "Error creating the new cart" });
   }
 });
 
@@ -27,7 +27,7 @@ routerCart.get("/:cid", async (req, res) => {
     const cartId = await cartManagerMongo.getCartId(cid);
     res.status(200).send({ status: "success", data: cartId });
   } catch (error) {
-    res.status(404).send({ status: "error", error: error.message });
+    res.status(404).send({ status: "error", error: "Error calling the cart"  });
   }
 });
 
@@ -39,6 +39,6 @@ routerCart.post("/:cid/product/:pid", async (req, res) => {
 
     res.status(200).send({ status: "success", data: cartId });
   } catch (error) {
-    res.status(404).send({ status: "error", error: error.message });
+    res.status(404).send({ status: "error", error: "Error adding product in the cart" });
   }
 });
