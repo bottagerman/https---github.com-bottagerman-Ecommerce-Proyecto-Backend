@@ -54,7 +54,7 @@ export class ProductManagerMongo {
         .catch((error) => {
           if (error.code === 11000) {
             console.log(error);
-            reject(new Error('El campo "code" ya existe en la base de datos.'));
+            reject(new Error("Code field already exist in the db"));
           } else {
             reject(error);
           }
@@ -83,7 +83,7 @@ export class ProductManagerMongo {
   updateProduct(id, product) {
     return new Promise((resolve, reject) => {
       if (product.code) {
-        reject(new Error("Code cant be modified"));
+        reject(new Error("Code can't be modified"));
       }
 
       let newProductFields = Object.keys(product);

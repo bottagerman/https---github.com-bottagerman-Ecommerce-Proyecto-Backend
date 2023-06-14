@@ -24,7 +24,7 @@ routerProducts.post("/", async (req, res) => {
 // GET ALL PRODUCTS
 routerProducts.get("/", async (req, res) => {
   try {
-    const allProducts = productManagerMongo.getProducts();
+    const allProducts = await productManagerMongo.getProducts();
 
     res.status(200).send({ status: "success", data: allProducts });
   } catch (error) {
@@ -37,6 +37,7 @@ routerProducts.get("/:pid", async (req, res) => {
   try {
     let pid = req.params.pid;
     const findProduct = await productManagerMongo.getProductById(pid);
+    res.status(200).send({ status: "success", data: findProduct });
   } catch (error) {
     res.status(401).send(error);
   }
