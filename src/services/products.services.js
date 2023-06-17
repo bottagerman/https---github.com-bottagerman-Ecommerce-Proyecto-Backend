@@ -62,8 +62,11 @@ export class ProductManagerMongo {
     });
   }
 
-  async getProducts() {
-    const allProducts = await productsModel.find();
+  async getProducts({ limit = 10, page, sort, query }) {
+    const allProducts = await productsModel.paginate(
+      {},
+      { page: page || 1, limit: limit || 10, sort: sort }
+    );
     return allProducts;
   }
 

@@ -4,7 +4,6 @@ import express from "express";
 import { routerProducts } from "./products.router.js";
 import { CartManagerMongo } from "../services/cart.services.js";
 
-
 export const routerCart = express.Router();
 routerCart.use("/products", routerProducts);
 
@@ -16,7 +15,9 @@ routerCart.post("/", async (req, res) => {
     const userCart = await cartManagerMongo.createCart();
     res.status(201).send({ status: "success", data: userCart });
   } catch (error) {
-    res.status(400).send({ status: "error", error: "Error creating the new cart" });
+    res
+      .status(400)
+      .send({ status: "error", error: "Error creating the new cart" });
   }
 });
 
@@ -27,11 +28,11 @@ routerCart.get("/:cid", async (req, res) => {
     const cartId = await cartManagerMongo.getCartId(cid);
     res.status(200).send({ status: "success", data: cartId });
   } catch (error) {
-    res.status(404).send({ status: "error", error: "Error calling the cart"  });
+    res.status(404).send({ status: "error", error: "Error calling the cart" });
   }
 });
 
-routerCart.post("/:cid/product/:pid", async (req, res) => {
+routerCart.post("/:cid/products/:pid", async (req, res) => {
   try {
     let cid = req.params.cid;
     let pid = req.params.pid;
@@ -39,6 +40,32 @@ routerCart.post("/:cid/product/:pid", async (req, res) => {
 
     res.status(200).send({ status: "success", data: cartId });
   } catch (error) {
-    res.status(404).send({ status: "error", error: "Error adding product in the cart" });
+    res
+      .status(404)
+      .send({ status: "error", error: "Error adding product in the cart" });
   }
+});
+routerCart.delete("/:cid/products/:pid", async (req, res) => {
+  try {
+    let cid = req.params.cid;
+    let pid = req.params.pid;
+    const cartId = await cartManagerMongo.deleteProductCart(cid, pid);
+
+    res.status(200).send({ status: "success", data: cartId });
+  } catch (error) {
+    res
+      .status(404)
+      .send({ status: "error", error: "Error deleting the product" });
+  }
+  routerCart.delete("/:cid/products", async (req, res) => {
+    try {
+      let cid = req.params.cid;
+      const deleteAllCart = await cartManagerMongo.deleteAllProductsCart(cid);
+      res.status(200).send({ status: "success", data: deleteAllCart });
+    } catch (error) {
+      res
+        .status(404)
+        .send({ status: "error", error: "Error deleting all the products" });
+    }
+  });
 });
