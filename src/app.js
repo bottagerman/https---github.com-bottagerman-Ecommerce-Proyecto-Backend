@@ -9,6 +9,7 @@ import { __dirname } from "./path.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { connectMongo } from "./utils/connections.js";
+import { routerCartViews } from "./routes/cart.view.js";
 
 const app = express();
 const port = 8080;
@@ -37,6 +38,7 @@ app.use("/api/users", routerUsers);
 
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
+app.use("/views/cart", routerCartViews )
 
 // GLOBAL ENDPOINT
 app.get("*", (req, res) => {

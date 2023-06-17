@@ -1,0 +1,24 @@
+<div>
+    <h1>
+        Your cart! 
+    </h1>
+
+
+    {{#each }}
+
+    <p>
+        Product name: {{this.name}}
+    </p>
+    <p>
+     Price: {{this.price}}
+    </p>
+    <p>
+     Quantity: {{this.description}}
+    </p>
+  {{/each}}
+
+    <p> Total price: $${{totalPrice}}</p>
+
+  <a href="http://localhost:8080/products">Back to Products</a>
+
+</div>
