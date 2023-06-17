@@ -2,8 +2,6 @@ import express from "express";
 import { Router } from "express";
 import { ProductManagerMongo } from "../services/products.services.js";
 
-
-
 export const routerProductsView = Router();
 const productManagerMongo = new ProductManagerMongo();
 
@@ -12,23 +10,25 @@ routerProductsView.use(express.urlencoded({ extended: true }));
 
 // GET ALL PRODUCTS
 routerProductsView.get("/", async (req, res) => {
-  const allProducts = await productManagerMongo.getProducts(req.query);
-
+  const allProducts = await productManagerMongo.getProductsLimit(req.query);
+  
   res.status(200).render("home", {
-    p: allProducts.docs.map((product) => ({
-      name: product.name,
+    allProducts: allProducts.docs.map((product) => ({
+      title: product.name,
       description: product.description,
       price: product.price,
+      stock: product.stock,
     })),
-    pagingCounter: allProducts.pagingCounter,
-    page: allProducts.page,
     totalPages: allProducts.totalPages,
-    hasPrevPage: allProducts.hasPrevPage,
-    hasNextPage: allProducts.hasNextPage,
     prevPage: allProducts.prevPage,
     nextPage: allProducts.nextPage,
+    page: allProducts.page,
+    hasPrevPage: allProducts.hasPrevPage,
+    hasNextPage: allProducts.hasNextPage,
   });
 });
+
+
 // GET PRODUCTS IN REAL TIME
 
 routerProductsView.get("/realtimeproducts", (req, res) => {

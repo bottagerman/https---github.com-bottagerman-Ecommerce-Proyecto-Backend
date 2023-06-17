@@ -38,11 +38,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 socket.on("products", (products) => {
   const productsUl = document.getElementById("productsUl");
-  productsUl.innerHTML = products.map(product => `
+  productsUl.innerHTML = products
+    .map(
+      (product) => `
     <li>
       <h3>${product.title}</h3>
       <p>${product.description}</p>
       <p>price:${product.price}</p>
       <p>stock:${product.stock}</p>
-    </li>`).join("");
+    </li>`
+    )
+    .join("");
 });

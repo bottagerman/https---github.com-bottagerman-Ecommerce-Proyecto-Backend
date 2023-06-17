@@ -33,10 +33,10 @@ routerProducts.get("/", async (req, res) => {
 });
 routerProducts.get("/", async (req, res) => {
   try {
-    const allProducts = await productManagerMongo.getProducts(req.query);
+    const allProductsLimit = await productManagerMongo.getProductsLimit(req.query);
 
     res.status(200).send({
-      payload: allProducts.docs.map((product) => ({
+      payload: allProductsLimit.docs.map((product) => ({
         id: product._id.toString(),
         name: product.name,
         description: product.description,
@@ -47,12 +47,12 @@ routerProducts.get("/", async (req, res) => {
         code: product.code,
         category: product.category,
       })),
-      totalPages: allProducts.totalPages,
-      prevPage: allProducts.prevPage,
-      nextPage: allProducts.nextPage,
-      page: allProducts.page,
-      hasPrevPage: allProducts.hasPrevPage,
-      hasNextPage: allProducts.hasNextPage,
+      totalPages: allProductsLimit.totalPages,
+      prevPage: allProductsLimit.prevPage,
+      nextPage: allProductsLimit.nextPage,
+      page: allProductsLimit.page,
+      hasPrevPage: allProductsLimit.hasPrevPage,
+      hasNextPage: allProductsLimit.hasNextPage,
     });
   } catch (error) {
     res.status(400).send({ status: "error", error: error.message });
