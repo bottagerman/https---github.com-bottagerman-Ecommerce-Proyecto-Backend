@@ -8,7 +8,7 @@ export const routerCartViews = Router ( );
 const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 
-routerCartViews.get("/carts/:cid", async (req, res) => {
+routerCartViews.get("/:cid", async (req, res) => {
     let cId = req.params.cid;
     const cart = await cartManagerMongo.getCartId(cId);
     const totalPrice = cart.products.reduce(

@@ -4,7 +4,7 @@ import { routerProducts } from "./products.router.js";
 import { CartManagerMongo } from "../services/cart.services.js";
 
 export const routerCart = express.Router();
-routerCart.use("/products", routerProducts);
+ routerCart.use("/products", routerProducts);
 
 const cartManagerMongo = new CartManagerMongo();
 

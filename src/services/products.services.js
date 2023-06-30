@@ -101,15 +101,13 @@ export class ProductManagerMongo {
           field === "name" ||
           field === "description" ||
           field === "price" ||
-          field === "thumbnail" ||
-          field === "code" ||
+          field === "thumbnails" ||
           field === "stock"
         ) {
           if (
             field === "name" ||
             field === "description" ||
-            field === "thumbnail" ||
-            field === "code"
+            field === "thumbnails"
           ) {
             this.#validateStringField(field, product);
           }
@@ -123,9 +121,13 @@ export class ProductManagerMongo {
       });
 
       productsModel
-        .findByIdAndUpdate(id, product)
+        .findByIdAndUpdate(id, product, { new: true })
         .then((result) => {
-          resolve(result);
+          if (result) {
+            resolve(result);
+          } else {
+            reject(new Error("Product not found"));
+          }
         })
         .catch((error) => {
           reject(new Error("Product not found"));
