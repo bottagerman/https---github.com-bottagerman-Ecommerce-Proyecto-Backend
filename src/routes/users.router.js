@@ -1,79 +1,75 @@
 import express from "express";
 import { UserModel } from "../DAO/models/users.models.js";
+import { UserService } from "../services/user.service.js";
+
 export const routerUsers = express.Router();
+
+const Service = new UserService();
 
 routerUsers.get("/", async (req, res) => {
   try {
-    const users = await UserModel.find({});
+    const users = await Service.getAll();
+    console.log(users);
     return res.status(200).json({
       status: "success",
-      msg: "lista de usuarios",
+      msg: "listado de usuarios",
       data: users,
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      data: {},
+    return res.status(500).render('errorPage',{
+      msg: 'Internal server ERROR!'
     });
   }
 });
 
 routerUsers.post("/", async (req, res) => {
-  const { firstName, lastName, email } = req.body;
   try {
-    if (!firstName || !lastName || !email) {
-      console.log("Validation error, please complete all the fields");
-      return res.status(400).json({
-        status: "error",
-        msg: "Validation error, please complete all the fields",
-        data: {},
-      });
-    }
-    const userCreated = await UserModel.create({ firstName, lastName, email });
-    return res.status(200).json({
+    const { firstName, lastName, email } = req.body;
+    const userCreated = await Service.createOne(firstName, lastName, email);
+    return res.status(201).json({
       status: "success",
-      msg: "lista de usuarios",
+      msg: "user created",
       data: userCreated,
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
+    return res.status(500).render('errorPage',{
+      msg: 'Internal server ERROR!'
+    });
+  }
+});
+
+routerUsers.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    return res.status(200).json({
+      status: "success",
+      msg: "user deleted",
       data: {},
+    });
+  } catch (e) {    
+    return res.status(500).render('errorPage',{
+      msg: 'Internal server ERROR!'
     });
   }
 });
 
 routerUsers.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { firstName, lastName, email } = req.body;
   try {
-    if (!firstName || !lastName || !email || !id) {
-      console.log("Validation error, please complete all the fields");
-      return res.status(400).json({
-        status: "error",
-        msg: "Validation error, please complete all the fields",
-        data: {},
-      });
-    }
-    const userUpdater = await UserModel.updateOne(
-      { _id: id },
-      { firstName, lastName, email }
-    );
-    return res.status(200).json({
+    const { id } = req.params;
+    const { firstName, lastName, email } = req.body;
+
+    return res.status(201).json({
       status: "success",
-      msg: "user updated",
-      data: userUpdater,
+      msg: "user uptaded",
+      data: { _id: id, firstName, lastName, email },
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      data: {},
+    return res.status(500).render('errorPage',{
+      msg: 'Internal server ERROR!'
     });
   }
 });
