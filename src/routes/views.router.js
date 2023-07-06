@@ -20,7 +20,9 @@ routerViews.get('/register', (req, res) => {
 });
 
 routerViews.get('/profile', checkUser, (req, res) => {
-  res.render('profile');
+  const user = {firstName: req.session.firstName,
+  age: req.session.age}
+  res.render('profile', user);
 });
 
 routerViews.get('/only-admin', checkAdmin, (req, res) => {
