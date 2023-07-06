@@ -1,5 +1,6 @@
 import express from 'express';
 import { UserModel } from '../DAO/models/users.models.js';
+import { createHash } from '../utils/bcrypt.js';
 
 export const routerLogin = express.Router();
 
@@ -9,7 +10,7 @@ routerLogin.post('/register', async (req, res) => {
     return res.status(400).render('errorPage', { msg: 'ERROR! Complete all the fields' });
   }
   try {
-    await UserModel.create({ firstName, lastName, age, email, password, admin: false });
+    await UserModel.create({ firstName, lastName, age, email, password:createHash(password), admin: false });
     req.session.firstName = firstName;
     req.session.email = email;
     req.session.admin = false;
