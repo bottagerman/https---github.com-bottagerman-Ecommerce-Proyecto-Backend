@@ -14,7 +14,7 @@ routerProductsView.get("/", async (req, res) => {
   const sort = req.query.sort === "desc" ? "-price" : "price"; // Ordena por precio ascendente o descendente
   const allProducts = await productManagerMongo.getProductsLimit({ limit, sort });
   
-  res.status(200).render("home", {
+  res.status(200).render("products", {
     allProducts: allProducts.docs.map((product) => ({
       title: product.name,
       description: product.description,
