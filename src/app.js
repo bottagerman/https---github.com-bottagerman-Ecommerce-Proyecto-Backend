@@ -11,6 +11,8 @@ import { __dirname } from "./path.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { connectMongo } from "./utils/connections.js";
+import passport from "passport";
+import { iniPassport } from "./config/passport.config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
@@ -37,6 +39,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+//PASSPORT INIT
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // HANDLEBARS ENGINE CONFIGURATION
 app.engine("handlebars", handlebars.engine());

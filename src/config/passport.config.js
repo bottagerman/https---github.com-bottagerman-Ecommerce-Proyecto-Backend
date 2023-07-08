@@ -1,3 +1,4 @@
+//@ts-check
 import passport from 'passport';
 import { UserModel } from '../DAO/models/users.models.js';
 import fetch from 'node-fetch';
@@ -36,8 +37,8 @@ export function iniPassport() {
               email: profile.email,
               firstName: profile._json.name || profile._json.login || 'noname',
               lastName: 'nolast',
-              isAdmin: false,
               password: 'nopass',
+              admin: false,
             };
             let userCreated = await UserModel.create(newUser);
             console.log('User Registration succesful');
