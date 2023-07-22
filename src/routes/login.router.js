@@ -1,7 +1,8 @@
 import express from "express";
 import passport from "passport";
 import { UserModel } from "../DAO/models/users.models.js";
-import { createHash } from "../utils/bcrypt.js";
+import { createHash, isValidPassword } from "../utils/bcrypt.js";
+
 
 export const routerLogin = express.Router();
 
@@ -42,10 +43,14 @@ routerLogin.post("/login", async (req, res) => {
   }
   try {
     const foundUser = await UserModel.findOne({ email });
-    if (foundUser && foundUser.password === password) {
-      req.session.firstName = foundUser.firstName;
-      req.session.email = foundUser.email;
-      req.session.admin = foundUser.admin;
+    if (foundUser && isValidPassword(foundUser, password)) {
+      req.session.user = { 
+        firstName: foundUser.firstName,
+        email: foundUser.email,
+        admin: foundUser.admin,
+        _id: foundUser._id.toString(),
+      };
+
       return res.redirect("/profile");
     } else {
       return res
@@ -59,6 +64,7 @@ routerLogin.post("/login", async (req, res) => {
       .render("errorPage", { msg: "Internal server ERROR!" });
   }
 });
+
 routerLogin.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] })
@@ -77,3 +83,26 @@ routerLogin.get(
 routerLogin.get("/show", (req, res) => {
   return res.send(JSON.stringify(req.session));
 });
+
+routerLogin.get("/current", async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.status(400).json({
+        status: "error",
+        msg: "User data not found in the session",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      msg: "session data",
+      payload: req.session.user,
+    });
+  } catch (e) {
+    console.log(e);
+    return res
+      .status(500)
+      .render("errorPage", { msg: "Internal server ERROR!" });
+  }
+});
+

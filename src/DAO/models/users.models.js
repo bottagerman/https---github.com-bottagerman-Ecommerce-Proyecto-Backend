@@ -27,6 +27,10 @@ const schema = new Schema({
   age: {
     type: Number,
   },
+  cart: {
+    type: String,
+    required: false
+  }
 });
 schema.plugin(monsoosePaginate);
 export const UserModel = model('users', schema);

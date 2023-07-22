@@ -58,6 +58,7 @@ app.use("/api/carts", routerCart);
 app.use("/api/users", routerUsers);
 app.use("/api/sessions", routerLogin);
 
+
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
 app.use("/views/cart", routerCartViews);
@@ -69,7 +70,7 @@ app.get("*", (req, res) => {
     status: "error",
     msg: "Oops, page not found!",
     data: {},
-  });
+  });ñ
 });
 
 // socketServer.on("connection", (socket) => {

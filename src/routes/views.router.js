@@ -24,7 +24,7 @@ routerViews.get("/register", (req, res) => {
 });
 
 routerViews.get("/profile", checkUser, (req, res) => {
-  const user = { firstName: req.session.firstName, age: req.session.age };
+  const user = { firstName: req.session.user.firstName, age: req.session.user.age };
   res.render("profile", user);
 });
 

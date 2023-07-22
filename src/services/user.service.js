@@ -12,6 +12,10 @@ export class UserService {
     return users;
   }
 
+async getOne(){
+  const user = await UserModel.findOne({email, password})
+  return user; 
+}
   async createOne(firstName, lastName, email) {
     this.validateUser(firstName, lastName, email);
     const userCreated = await UserModel.create({ firstName, lastName, email });
