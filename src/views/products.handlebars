@@ -1,14 +1,16 @@
 <div>
   <h1>All our Products!</h1>
   {{#each allProducts}}
-    <div style="width: 250px; padding: 15px; border: solid 3px; margin: 15px;">
-      <p>{{this.title}}</p>
-      <p>{{this.description}}</p>
-      <p>price:{{this.price}}</p>
-      <p>stock:{{this.stock}}</p>
-      <button>Detail</button>
-      <button>Add to cart</button>
-    </div>
+<div class="card" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h3 class="card-title">{{this.title}}</h3>
+    <p class="card-text">{{this.description}}</p>
+    <p class="card-text">{{this.price}}</p>
+    <a href="#" class="btn btn-primary">Detail</a>
+    <a href="#" class="btn btn-primary">Add to cart</a>
+  </div>
+</div>
   {{/each}}
   <div>
     {{this.pagingCounter}}

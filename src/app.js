@@ -50,7 +50,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 // PUBLIC FILES
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("public"));
 
 // ALL MY API ENDPOINTS
 app.use("/api/products", routerProducts);
