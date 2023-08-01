@@ -1,7 +1,7 @@
 import express from "express";
 import { Router } from "express";
-import { ProductManagerMongo } from "../services/products.services.js";
-import { CartManagerMongo } from "../services/cart.services.js";
+import { ProductManagerMongo } from "../mongo/products.mongo.js";
+import { CartManagerMongo } from "../mongo/cart.mongo.js";
 
 export const routerCartViews = Router ( ); 
 

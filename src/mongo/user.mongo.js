@@ -1,10 +1,14 @@
-import { UserModel } from '../DAO/models/users.models.js';
+import { UserModel } from "../DAO/models/users.models.js";
 
 export class UserService {
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      console.log('validation error: please complete firstName, lastname and email.');
-      throw new Error('validation error: please complete firstName, lastname and email.');
+      console.log(
+        "validation error: please complete firstName, lastname and email."
+      );
+      throw new Error(
+        "validation error: please complete firstName, lastname and email."
+      );
     }
   }
   async getAll() {
@@ -12,10 +16,10 @@ export class UserService {
     return users;
   }
 
-async getOne(){
-  const user = await UserModel.findOne({email, password})
-  return user; 
-}
+  async getOne() {
+    const user = await UserModel.findOne({ email, password });
+    return user;
+  }
   async createOne(firstName, lastName, email) {
     this.validateUser(firstName, lastName, email);
     const userCreated = await UserModel.create({ firstName, lastName, email });
@@ -28,9 +32,12 @@ async getOne(){
   }
 
   async updateOne(_id, firstName, lastName, email) {
-    if (!_id) throw new Error('invalid _id');
+    if (!_id) throw new Error("invalid _id");
     this.validateUser(firstName, lastName, email);
-    const userUptaded = await UserModel.updateOne({ _id: id }, { firstName, lastName, email });
+    const userUptaded = await UserModel.updateOne(
+      { _id: id },
+      { firstName, lastName, email }
+    );
     return userUptaded;
   }
 }

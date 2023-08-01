@@ -1,6 +1,6 @@
 import express from "express";
 import { UserModel } from "../DAO/models/users.models.js";
-import { UserService } from "../services/user.service.js";
+import { UserService } from "../mongo/user.mongo.js";
 
 export const routerUsers = express.Router();
 

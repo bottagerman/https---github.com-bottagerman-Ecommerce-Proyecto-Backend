@@ -1,7 +1,7 @@
 //@ts-check
 import express from "express";
 import { routerProducts } from "./products.router.js";
-import { CartManagerMongo } from "../services/cart.services.js";
+import { CartManagerMongo } from "../mongo/cart.mongo.js";
 
 export const routerCart = express.Router();
  routerCart.use("/products", routerProducts);

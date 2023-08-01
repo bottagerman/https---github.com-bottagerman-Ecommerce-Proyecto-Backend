@@ -1,8 +1,6 @@
-//@ts-check
-
 import express from "express";
 //import { product } from "../DAO/handlers/productManger.js";
-import { ProductManagerMongo } from "../services/products.services.js";
+import { ProductManagerMongo } from "../mongo/products.mongo.js";
 export const routerProducts = express.Router();
 
 const productManagerMongo = new ProductManagerMongo();
