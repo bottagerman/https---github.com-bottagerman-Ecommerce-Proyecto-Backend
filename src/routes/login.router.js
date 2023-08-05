@@ -25,7 +25,7 @@ routerLogin.post("/register", async (req, res) => {
     req.session.firstName = firstName;
     req.session.email = email;
     req.session.admin = false;
-    return res.redirect("/profile");
+    return res.redirect("/login");
   } catch (e) {
     console.log(e);
     return res

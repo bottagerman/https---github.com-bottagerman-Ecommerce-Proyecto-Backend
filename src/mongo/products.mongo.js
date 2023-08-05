@@ -77,10 +77,14 @@ export class ProductManagerMongo {
 
   getProductById(id) {
     return new Promise((resolve, reject) => {
-      let foundProduct = productsModel
+      productsModel
         .findById(id)
         .then((result) => {
-          resolve(result);
+          if (result) {
+            resolve(result);
+          } else {
+            reject(new Error("Product not found"));
+          }
         })
         .catch((error) => {
           reject(new Error("Product not found"));
