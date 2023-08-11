@@ -1,6 +1,6 @@
 import { productsModel } from "../DAO/models/products.models.js";
 
-export class ProductManagerMongo {
+ export class ProductManagerMongo {
   constructor() {}
 
   #validateStringField(key, product) {

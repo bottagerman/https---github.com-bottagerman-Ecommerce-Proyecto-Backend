@@ -53,8 +53,8 @@ export const createProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const { pid } = req.params;
-    await productService.deleteProduct(pid);
+    const productIdToDelete = req.body.id; 
+    await productService.deleteProduct(productIdToDelete);
     return res.status(200).json({
       status: "success",
       msg: "product deleted",
@@ -65,7 +65,7 @@ export const deleteProduct = async (req, res) => {
       msg: "Internal server ERROR!",
     });
   }
-};
+}
 
 export const updateProduct = async (req, res) => {
   try {

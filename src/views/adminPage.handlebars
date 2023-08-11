@@ -1,0 +1,40 @@
+<div class="bg-image" style="display:flex; justify-content:center; align-items:center">
+<div style="flex-direction:row; align-items:center; ">
+<div class="card" style=" width: 20rem; height:35rem">
+<h1 style="margin:10px 10px; font-size:1.7rem;">Welcome back {{firstName}}!</h1>
+<div>
+    <p style="margin:0px 10px">
+        This is where the magic begins! 
+        When you rol is: <span style="background-color: #82FA58; font-weight:bold">  
+        "ADMIN = {{rol}}"</span> 
+        you can control the products: create and delete. 
+    </p>
+</div>
+<form action="/api/products" method="POST">
+  <div class="card-body" style="display: flex, flex-wrap:wrap">
+    <input type="text" name="name" placeholder="Product Name">
+    <input type="text" name="description" placeholder="Description">
+    <input type="text" name="price" placeholder="Price">
+    <input type="text" name="thumbnails" placeholder="Thumbnails">
+    <input type="text" name="stock" placeholder="Stock">
+    <input type="text" name="status" placeholder="Status">
+    <input type="text" name="code" placeholder="Code">
+    <input type="text" name="category" placeholder="Category">
+    <button type="submit" class="btn btn-success" style="margin-top:10px">
+      POST NEW PRODUCT
+    </button>
+<form action="/api/products/" method="DELETE">
+  <div class="card-body" style="display: flex, flex-wrap:wrap">
+    <input type="text" name="id" value="{{productIdToDelete}}" id>
+    <button type="submit" class="btn btn-danger" style="margin-top:10px">
+      DELETE
+    </button>
+  </div>
+</form>
+  </div>
+</form>
+  </div>
+</div>
+</div>
+</div> 
+

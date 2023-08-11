@@ -1,4 +1,5 @@
 import { UserModel } from "../DAO/models/users.models.js";
+import UserDTO from "../DTO/users.dto.js";
 import { UserService } from "../service/users.service.js";
 
 //const userController = new UserMongo();
@@ -24,6 +25,7 @@ export const createUser = async (req, res) => {
     const { firstName, lastName, age, email, password } = req.body;
     await userService.createNewUser(firstName, lastName, age, email, password);
     req.session.firstName = firstName;
+    req.session.lastName = lastName;
     req.session.email = email;
     req.session.admin = false;
     return res.redirect("/login");
@@ -89,16 +91,11 @@ export const updateUser = async (req, res) => {
 
 export const userSession = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.status(400).json({
-        status: "error",
-        msg: "User data not found in the session",
-      });
-    }
+    let user = new UserDTO(req.session.user)
     return res.status(200).json({
       status: "success",
       msg: "session data",
-      payload: req.session.user,
+      payload: user,
     });
   } catch (e) {
     console.log(e);
