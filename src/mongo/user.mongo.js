@@ -1,6 +1,7 @@
 import { UserModel } from "../DAO/models/users.models.js";
+import { isValidPassword, createHash } from "../utils/bcrypt.js";
 
-export class UserService {
+class UserMongo {
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
       console.log(
@@ -16,14 +17,40 @@ export class UserService {
     return users;
   }
 
-  async getOne() {
-    const user = await UserModel.findOne({ email, password });
-    return user;
+  async getOne(email, password) {
+    try {
+      const foundUser = await UserModel.findOne({ email });
+      if (foundUser && isValidPassword(foundUser, password)) {
+        return {
+          firstName: foundUser.firstName,
+          email: foundUser.email,
+          admin: foundUser.admin,
+          _id: foundUser._id.toString(),
+        };
+      } else {
+        throw new Error("Invalid email or password");
+      }
+    } catch (e) {
+      console.log(e);
+      throw new Error("Error finding user");
+    }
   }
-  async createOne(firstName, lastName, email) {
-    this.validateUser(firstName, lastName, email);
-    const userCreated = await UserModel.create({ firstName, lastName, email });
-    return userCreated;
+  
+  async createNewUser(firstName, lastName, age, email, password) {
+    try {
+      this.validateUser(firstName, lastName, email);
+      await UserModel.create({
+        firstName,
+        lastName,
+        age,
+        email,
+        password: createHash(password),
+        admin: false,
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error("Error creating user");
+    }
   }
 
   async deletedOne(_id) {
@@ -41,3 +68,4 @@ export class UserService {
     return userUptaded;
   }
 }
+export const userModel = new UserMongo();

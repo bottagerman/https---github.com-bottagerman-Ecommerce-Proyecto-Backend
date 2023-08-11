@@ -1,19 +1,13 @@
 import express from "express";
 import { checkAdmin, checkUser } from "../middlewares/auth.js";
+import * as UserController from "../controllers/users.controller.js";
 export const routerViews = express.Router();
 
 routerViews.get("/", (req, res) => {
   res.render("home");
 });
 
-routerViews.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.render("errorPage", { msg: "Cannot close the session" });
-    }
-    return res.redirect("/login");
-  });
-});
+routerViews.get("/logout", UserController.userLogout);
 
 routerViews.get("/login", (req, res) => {
   res.render("loginForm");
