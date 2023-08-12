@@ -4,7 +4,17 @@ import { userModel } from "../mongo/user.mongo.js";
 export class UserService {
   async createNewUser(firstName, lastName, age, email, password) {
     try {
-      const newUser = await userModel.createNewUser(firstName, lastName, age, email, password);
+      const newUser = await userModel.createNewUser(
+        firstName,
+        lastName,
+        age,
+        email,
+        password
+      );
+
+      const cart = await cartManagerMongo.createCart();
+      await userModel.updateUserCart(newUser._id, cart._id); // Update user with cart
+
       return newUser;
     } catch (e) {
       console.log(e);

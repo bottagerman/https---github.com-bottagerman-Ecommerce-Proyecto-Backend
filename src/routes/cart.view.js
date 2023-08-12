@@ -2,6 +2,7 @@ import express from "express";
 import { Router } from "express";
 import { ProductManagerMongo } from "../mongo/products.mongo.js";
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
+import * as cartController from "../controllers/carts.controller.js"
 
 export const routerCartViews = Router ( ); 
 
@@ -16,13 +17,5 @@ routerCartViews.get("/:cid", async (req, res) => {
       0
     );
     console.log(totalPrice);
-  
-    res.status(200).render("cartDetail", {
-      p: cart.products.map((product) => ({
-        name: product.product.name,
-        price: product.product.price,
-        quantity: product.quantity,
-      })),
-      totalPrice,
-    });
+      res.status(200).render("products", cart)
   });

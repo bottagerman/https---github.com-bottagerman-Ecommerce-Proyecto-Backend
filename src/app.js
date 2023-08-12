@@ -61,7 +61,7 @@ app.use("/api/sessions", routerLogin);
 
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
-app.use("/views/cart", routerCartViews);
+app.use("/views/carts", routerCartViews);
 app.use("/", routerViews);
 
 // GLOBAL ENDPOINT

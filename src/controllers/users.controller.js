@@ -1,5 +1,6 @@
 import { UserModel } from "../DAO/models/users.models.js";
 import UserDTO from "../DTO/users.dto.js";
+import * as cartController from "../controllers/carts.controller.js";
 import { UserService } from "../service/users.service.js";
 
 //const userController = new UserMongo();
@@ -7,7 +8,7 @@ const userService = new UserService();
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await userController.getAll();
+    const users = await userService.getAll();
     return res.status(200).json({
       status: "success",
       msg: "listado de usuarios",
@@ -91,7 +92,7 @@ export const updateUser = async (req, res) => {
 
 export const userSession = async (req, res) => {
   try {
-    let user = new UserDTO(req.session.user)
+    let user = new UserDTO(req.session.user);
     return res.status(200).json({
       status: "success",
       msg: "session data",

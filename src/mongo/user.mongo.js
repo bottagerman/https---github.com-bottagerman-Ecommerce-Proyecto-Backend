@@ -35,7 +35,7 @@ class UserMongo {
       throw new Error("Error finding user");
     }
   }
-  
+
   async createNewUser(firstName, lastName, age, email, password) {
     try {
       this.validateUser(firstName, lastName, email);
@@ -50,6 +50,24 @@ class UserMongo {
     } catch (e) {
       console.log(e);
       throw new Error("Error creating user");
+    }
+  }
+  async updateUserCart(userId, cartId) {
+    try {
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        userId,
+        { cart: cartId },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new Error("User not found");
+      }
+
+      return updatedUser;
+    } catch (e) {
+      console.log(e);
+      throw new Error("Error updating user's cart");
     }
   }
 

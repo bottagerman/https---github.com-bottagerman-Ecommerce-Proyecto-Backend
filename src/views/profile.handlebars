@@ -5,9 +5,16 @@
  PRODUCT LIST!
  </a>
  </button>
+ <form action='/api/carts/' method='POST'>
 <button>
-<a style="text-decoration: none;" href='/views/cart'>CART</a>
+<a style="text-decoration: none;">CART</a>
 </button>
+ </form>
+ <form action='/api/carts/{{cartId}}' method='GET'>
+<button>
+<a style="text-decoration: none;"> YOUR CART</a>
+</button>
+ </form>
 <button>
 <a style="text-decoration: none;" href='/logout'>LOGOUT</a>
 </button>
