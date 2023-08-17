@@ -52,24 +52,6 @@ class UserMongo {
       throw new Error("Error creating user");
     }
   }
-  async updateUserCart(userId, cartId) {
-    try {
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        userId,
-        { cart: cartId },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        throw new Error("User not found");
-      }
-
-      return updatedUser;
-    } catch (e) {
-      console.log(e);
-      throw new Error("Error updating user's cart");
-    }
-  }
 
   async deletedOne(_id) {
     const deleted = await UserModel.deleteOne({ _id: _id });
@@ -84,6 +66,24 @@ class UserMongo {
       { firstName, lastName, email }
     );
     return userUptaded;
+  }
+  async updateUserCart(userId, cartId) {
+    try {
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        userId,
+        { cart: cartId },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        throw new Error("User not found");
+      }
+  
+      return updatedUser;
+    } catch (e) {
+      console.log(e);
+      throw new Error("Error updating user's cart");
+    }
   }
 }
 export const userModel = new UserMongo();

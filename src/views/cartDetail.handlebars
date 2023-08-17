@@ -1,11 +1,15 @@
 
 <div>
     <h1>
-      This is your cart! {{this.id}}
+      This is your cart! {{cart.id}}
     </h1>
+    {{#each productId.id}}
     <li>
       <ul>
-      
+        <p>
+      {{productId.title}}
+        </p>
       </ul>
     </li>
+    {{/each}}
 </div>

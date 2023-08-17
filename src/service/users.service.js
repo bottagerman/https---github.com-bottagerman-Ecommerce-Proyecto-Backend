@@ -2,7 +2,7 @@ import { userModel } from "../mongo/user.mongo.js";
 //import { userModel } from "../DAO/memory/users.memory.js";
 
 export class UserService {
-  async createNewUser(firstName, lastName, age, email, password) {
+  async createNewUser(firstName, lastName, age, email, password ) {
     try {
       const newUser = await userModel.createNewUser(
         firstName,
@@ -10,10 +10,8 @@ export class UserService {
         age,
         email,
         password
+        
       );
-
-      const cart = await cartManagerMongo.createCart();
-      await userModel.updateUserCart(newUser._id, cart._id); // Update user with cart
 
       return newUser;
     } catch (e) {
@@ -30,4 +28,5 @@ export class UserService {
       throw new Error("Error finding user");
     }
   }
+
 }

@@ -14,9 +14,9 @@ export class CartService {
         throw new Error("Product not found");
       }
 
-      // ... Lógica para agregar el producto al carrito y actualizar el stock ...
+      
 
-      return cart; // Retorna el carrito actualizado
+      return cart; 
     } catch (error) {
       throw new Error("Error adding product to cart: " + error.message);
     }

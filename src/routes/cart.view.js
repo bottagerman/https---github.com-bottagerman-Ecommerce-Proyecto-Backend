@@ -3,6 +3,7 @@ import { Router } from "express";
 import { ProductManagerMongo } from "../mongo/products.mongo.js";
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
 import * as cartController from "../controllers/carts.controller.js"
+import { checkCartSession } from "../middlewares/auth.js";
 
 export const routerCartViews = Router ( ); 
 
@@ -17,5 +18,6 @@ routerCartViews.get("/:cid", async (req, res) => {
       0
     );
     console.log(totalPrice);
-      res.status(200).render("products", cart)
+      res.status(200).render("cartDetail", {cart})
   });
+  routerCartViews.get("/", checkCartSession, cartController.createOrRedirectToCart);  

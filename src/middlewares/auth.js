@@ -17,11 +17,10 @@ export function checkAdmin(req, res, next) {
 }
 export const checkCartSession = async (req, res, next) => {
   try {
-    if (!req.session.cartId) {
+    if (!req.session.user.cart) {
       const userCart = await cartController.createCart();
-      req.session.cartId = userCart._id;
+      req.session.user.cart = userCart._id;
     }
-
     next();
   } catch (error) {
     res.status(500).render("errorPage", {

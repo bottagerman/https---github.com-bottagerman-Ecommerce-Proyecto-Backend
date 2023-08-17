@@ -19,9 +19,9 @@ export class CartManagerMongo {
     });
   }
 
-  async getCartId(id) {
+  async getCartId(_id) {
     try {
-      const cart = await cartModel.findById(id);
+      const cart = await cartModel.findOne({_id});
 
       return cart;
     } catch (error) {

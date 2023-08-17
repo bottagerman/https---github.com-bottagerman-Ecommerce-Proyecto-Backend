@@ -24,7 +24,7 @@ export const getAllUsers = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const { firstName, lastName, age, email, password } = req.body;
-    await userService.createNewUser(firstName, lastName, age, email, password);
+    await userService.createNewUser(firstName, lastName, age, email, password, );
     req.session.firstName = firstName;
     req.session.lastName = lastName;
     req.session.email = email;

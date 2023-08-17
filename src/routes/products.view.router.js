@@ -11,7 +11,7 @@ routerProductsView.use(express.urlencoded({ extended: true }));
 // GET ALL PRODUCTS
 routerProductsView.get("/", async (req, res) => {
   const limit = req.query.limit || 10;
-  const sort = req.query.sort === "desc" ? "-price" : "price"; // Ordena por precio ascendente o descendente
+  const sort = req.query.sort === "desc" ? "-price" : "price"; 
   const allProducts = await productManagerMongo.getProductsLimit({ limit, sort });
   res.status(200).render("products", {
     allProducts: allProducts.docs.map((product) => ({
@@ -20,7 +20,7 @@ routerProductsView.get("/", async (req, res) => {
       price: product.price,
       stock: product.stock,
       id: product._id
-    ,})),
+    , })),
     totalPages: allProducts.totalPages,
     prevPage: allProducts.prevPage,
     nextPage: allProducts.nextPage,

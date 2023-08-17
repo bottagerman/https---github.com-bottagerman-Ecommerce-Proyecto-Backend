@@ -22,6 +22,7 @@ routerViews.get("/profile", checkUser, (req, res) => {
   const user = {
     firstName: req.session.user.firstName,
     age: req.session.user.age,
+    cart: req.session.user.cartId,
   };
   res.render("profile", user);
 });

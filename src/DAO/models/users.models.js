@@ -28,8 +28,7 @@ const schema = new Schema({
     type: Number,
   },
   cart: {
-    type: Schema.Types.ObjectId,
-    ref: "carts",
+    type: String,
     required: false
   }
 });
