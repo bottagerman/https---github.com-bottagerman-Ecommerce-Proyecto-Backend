@@ -5,20 +5,27 @@ const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 
 export class CartService {
+
   async addProductToCart(cartId, productId) {
-    try {
-      const cart = await cartManagerMongo.getCartId(cartId);
-      const product = await productManagerMongo.getProductById(productId);
+    const cart = await cartManagerMongo.getCartId({ _id: cartId });
+    
+    if (cart) {
+      const product = cart.products.find(
+        (product) => product.product.toString() === productId
+      );
+      if (product) {
+        product.quantity += 1;
+      } else {
+        const productToAdd = await productManagerMongo.getProductById(productId);
 
-      if (!product) {
-        throw new Error("Product not found");
+        if (productToAdd) {
+          cart.products.push({
+            product: productToAdd._id,
+            quantity: 1,
+          });
+        }
       }
-
-      
-
-      return cart; 
-    } catch (error) {
-      throw new Error("Error adding product to cart: " + error.message);
+      await cart.save();
     }
   }
 

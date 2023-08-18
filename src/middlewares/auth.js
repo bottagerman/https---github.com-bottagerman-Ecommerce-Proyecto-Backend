@@ -1,4 +1,3 @@
-import * as cartController from "../controllers/carts.controller.js";
 
 export function checkUser(req, res, next) {
   if (req.session.user) {
@@ -18,10 +17,12 @@ export function checkAdmin(req, res, next) {
 export const checkCartSession = async (req, res, next) => {
   try {
     if (!req.session.user.cart) {
-      const userCart = await cartController.createCart();
-      req.session.user.cart = userCart._id;
+      // Si no hay carrito en la sesión, avanza a la creación del carrito
+      return next();
+    } else {
+      // Si hay un carrito en la sesión, redirige directamente a la vista del carrito
+      return res.redirect(`/views/carts/${req.session.user.cart}`);
     }
-    next();
   } catch (error) {
     res.status(500).render("errorPage", {
       msg: "Internal server ERROR!",

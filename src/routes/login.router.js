@@ -7,7 +7,7 @@ export const routerLogin = express.Router();
 
 routerLogin.post("/register", UserController.createUser) 
 
-routerLogin.post("/login", UserController.logUser)
+routerLogin.post("/login", UserController.logUser) 
 
 routerLogin.get(
   "/github",

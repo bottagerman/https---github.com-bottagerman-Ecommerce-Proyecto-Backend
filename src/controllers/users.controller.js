@@ -24,11 +24,12 @@ export const getAllUsers = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const { firstName, lastName, age, email, password } = req.body;
-    await userService.createNewUser(firstName, lastName, age, email, password, );
+    await userService.createNewUser(firstName, lastName, age, email, password);
     req.session.firstName = firstName;
     req.session.lastName = lastName;
     req.session.email = email;
     req.session.admin = false;
+    console.log(req.session.lastName)
     return res.redirect("/login");
   } catch (e) {
     console.log(e);
@@ -43,6 +44,7 @@ export const logUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await userService.findAUser(email, password);
     req.session.user = user;
+    console.log(user._id)
     return res.redirect("/profile");
   } catch (error) {
     return res

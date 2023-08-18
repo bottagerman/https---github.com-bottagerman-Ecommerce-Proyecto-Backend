@@ -20,7 +20,7 @@ routerProductsView.get("/", async (req, res) => {
       price: product.price,
       stock: product.stock,
       id: product._id
-    , })),
+    ,cart:req.session.user.cart})),
     totalPages: allProducts.totalPages,
     prevPage: allProducts.prevPage,
     nextPage: allProducts.nextPage,

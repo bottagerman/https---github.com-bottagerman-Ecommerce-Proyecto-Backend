@@ -13,11 +13,13 @@ const productManagerMongo = new ProductManagerMongo();
 routerCartViews.get("/:cid", async (req, res) => {
     let cId = req.params.cid;
     const cart = await cartManagerMongo.getCartId(cId);
+    const product = cart.products.map((prod) => prod.toJSON());
     const totalPrice = cart.products.reduce(
       (acc, product) => acc + product.quantity * product.product.price,
       0
     );
     console.log(totalPrice);
-      res.status(200).render("cartDetail", {cart})
+      res.status(200).render("cartDetail", {cart, product})
   });
-  routerCartViews.get("/", checkCartSession, cartController.createOrRedirectToCart);  
+
+  routerCartViews.post("/", checkCartSession, cartController.createCart )
