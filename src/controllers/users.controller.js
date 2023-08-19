@@ -1,7 +1,7 @@
-import { UserModel } from "../DAO/models/users.models.js";
 import UserDTO from "../DTO/users.dto.js";
-import * as cartController from "../controllers/carts.controller.js";
 import { UserService } from "../service/users.service.js";
+import EErros from "../service/error/enums.js";
+import CustomError from "../service/error/customErrors.js";
 
 //const userController = new UserMongo();
 const userService = new UserService();
@@ -15,9 +15,11 @@ export const getAllUsers = async (req, res) => {
       data: users,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).render("errorPage", {
-      msg: "Internal server ERROR!",
+    CustomError.createError({
+      name: "ERROR-FIND",
+      cause: "Error getting all the users",
+      message: "Error getting all the users",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -29,13 +31,14 @@ export const createUser = async (req, res) => {
     req.session.lastName = lastName;
     req.session.email = email;
     req.session.admin = false;
-    console.log(req.session.lastName)
     return res.redirect("/login");
   } catch (e) {
-    console.log(e);
-    return res
-      .status(400)
-      .render("errorPage", { msg: "ERROR! Check your email" });
+    CustomError.createError({
+      name: "ERROR-CREATE",
+      cause: "Error creating a new user",
+      message: "Error creating a new user",
+      code: EErros.DATABASES_READ_ERROR,
+    });
   }
 };
 
@@ -44,12 +47,14 @@ export const logUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await userService.findAUser(email, password);
     req.session.user = user;
-    console.log(user._id)
     return res.redirect("/profile");
   } catch (error) {
-    return res
-      .status(400)
-      .render("errorPage", { msg: "ERROR! Invalid email or password" });
+    CustomError.createError({
+      name: "ERROR-FIND",
+      cause: "Error logging, complete the email or password.",
+      message: "Error logging, complete the email or password.",
+      code: EErros.DATABASES_READ_ERROR,
+    });
   }
 };
 
@@ -63,8 +68,11 @@ export const deleteUser = async (req, res) => {
       data: {},
     });
   } catch (error) {
-    return res.status(500).render("errorPage", {
-      msg: "Internal server ERROR!",
+    CustomError.createError({
+      name: "ERROR-DELETE",
+      cause: "Error deleting this user, check the id",
+      message: "Error deleting this user, check the id",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -85,9 +93,11 @@ export const updateUser = async (req, res) => {
       data: updatedUser,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).render("errorPage", {
-      msg: "Internal server ERROR!",
+    CustomError.createError({
+      name: "ERROR-UPDATE",
+      cause: "Error updating this user, check all the fields that you want to change or look the id",
+      message: "Error updating this user, check all the fields that you want to change or look the id",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -101,10 +111,12 @@ export const userSession = async (req, res) => {
       payload: user,
     });
   } catch (e) {
-    console.log(e);
-    return res
-      .status(500)
-      .render("errorPage", { msg: "Internal server ERROR!" });
+    CustomError.createError({
+      name: "ERROR-SESSION",
+      cause: "Error looking the session of this user.",
+      message: "Error looking the session of this user.",
+      code: EErros.DATABASES_READ_ERROR,
+    });;
   }
 };
 export const userLogout = async (req, res) => {

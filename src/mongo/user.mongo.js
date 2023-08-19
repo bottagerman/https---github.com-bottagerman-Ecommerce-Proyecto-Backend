@@ -1,15 +1,17 @@
 import { UserModel } from "../DAO/models/users.models.js";
 import { isValidPassword, createHash } from "../utils/bcrypt.js";
+import CustomError from "../service/error/customErrors.js";
+import EErros from "../service/error/enums.js";
 
 class UserMongo {
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      console.log(
-        "validation error: please complete firstName, lastname and email."
-      );
-      throw new Error(
-        "validation error: please complete firstName, lastname and email."
-      );
+      throw CustomError.createError({
+        name: "ERROR-VALIDATE",
+        cause: "Complete all the fields",
+        message: "Complete all the fields for a good validation",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
   async getAll() {
@@ -28,11 +30,20 @@ class UserMongo {
           _id: foundUser._id.toString(),
         };
       } else {
-        throw new Error("Invalid email or password");
+        throw CustomError.createError({
+          name: "ERROR-FIND",
+          cause: "Cant found the user in the db",
+          message: "Cant found the user in the db",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
     } catch (e) {
-      console.log(e);
-      throw new Error("Error finding user");
+      throw CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Cant found the user in the db",
+        message: "Cant found the user in the db",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -48,8 +59,12 @@ class UserMongo {
         admin: false,
       });
     } catch (e) {
-      console.log(e);
-      throw new Error("Error creating user");
+      throw CustomError.createError({
+        name: "ERROR-CREATE",
+        cause: "Complete all the fields",
+        message: "Complete all the fields for a good validation",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -59,7 +74,13 @@ class UserMongo {
   }
 
   async updateOne(_id, firstName, lastName, email) {
-    if (!_id) throw new Error("invalid _id");
+    if (!_id)
+      throw CustomError.createError({
+        name: "ERROR-UPDATE",
+        cause: "Id not found",
+        message: "The id not found to update this user",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     this.validateUser(firstName, lastName, email);
     const userUptaded = await UserModel.updateOne(
       { _id: id },
@@ -74,15 +95,24 @@ class UserMongo {
         { cart: cartId },
         { new: true }
       );
-  
+
       if (!updatedUser) {
-        throw new Error("User not found");
+        throw CustomError.createError({
+          name: "ERROR-UPDATE",
+          cause: "Id user not found",
+          message: "The id not found to update this user cart",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
-  
+
       return updatedUser;
     } catch (e) {
-      console.log(e);
-      throw new Error("Error updating user's cart");
+      throw CustomError.createError({
+        name: "ERROR-UPDATE",
+        cause: "Id not found",
+        message: "The id not found to update this user",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 }

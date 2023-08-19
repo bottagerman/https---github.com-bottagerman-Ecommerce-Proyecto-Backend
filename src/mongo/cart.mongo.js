@@ -1,5 +1,7 @@
 import { cartModel } from "../DAO/models/cart.models.js";
 import { ProductManagerMongo } from "./products.mongo.js";
+import CustomError from "../service/error/customErrors.js";
+import EErros from "../service/error/enums.js";
 
 const productManagerMongo = new ProductManagerMongo();
 
@@ -13,19 +15,29 @@ export class CartManagerMongo {
         .then((cart) => {
           resolve(cart);
         })
-        .catch((error) => {
-          reject(new Error(error));
-        });
+        .catch(
+          CustomError.createError({
+            name: "ERROR-CREATE",
+            cause: "Error creating cart",
+            message: "Error creating a cart",
+            code: EErros.INVALID_TYPES_ERROR,
+          })
+        );
     });
   }
 
   async getCartId(_id) {
     try {
-      const cart = await cartModel.findOne({_id});
+      const cart = await cartModel.findOne({ _id });
 
       return cart;
     } catch (error) {
-      throw new Error("Cart not found");
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error finding the cart",
+        message: "Error finding a cart",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -34,10 +46,14 @@ export class CartManagerMongo {
       const productToAdd = await productManagerMongo.getProductById(pId);
 
       if (!productToAdd) {
-        throw new Error("Product not found");
+        CustomError.createError({
+          name: "ERROR-FIND",
+          cause: "Error there's not product to add ",
+          message: "Add the product before searching for a product",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
 
-      console.log(productToAdd._id);
 
       let cart = await cartModel.findOneAndUpdate(
         { _id: cId, "products.product": productToAdd._id },
@@ -54,7 +70,12 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      throw new Error(error);
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error there's not cart to add the product ",
+        message: "Check if cart exist before try to add a product",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -63,7 +84,12 @@ export class CartManagerMongo {
       const productToDelete = await productManagerMongo.getProductById(pId);
 
       if (!productToDelete) {
-        throw new Error("Product not found");
+        CustomError.createError({
+          name: "ERROR-FIND",
+          cause: "Error there's not product to delete ",
+          message: "The cart its empty!",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
 
       let cart = await cartModel.findOneAndUpdate(
@@ -76,8 +102,7 @@ export class CartManagerMongo {
       let findIndexArray = cart.products.findIndex(
         (product) => product.product.toString() === pId
       );
-      console.log(cart.products);
-      console.log(findIndexArray);
+ 
 
       if (cart.products[findIndexArray].quantity <= 1) {
         await cartModel.findByIdAndUpdate(cId, {
@@ -87,7 +112,12 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      throw new Error(error);
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error there's not product to delete ",
+        message: "The cart its empty!",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -96,7 +126,12 @@ export class CartManagerMongo {
       const productToDelete = await productManagerMongo.getProductById(pId);
 
       if (!productToDelete) {
-        throw new Error("Product not found");
+        CustomError.createError({
+          name: "ERROR-FIND",
+          cause: "Error there's not product to delete ",
+          message: "The cart its empty!",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
 
       let cart = await cartModel.findOneAndUpdate(
@@ -108,7 +143,12 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      throw new Error(error);
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error there's not product to delete ",
+        message: "The cart its empty!",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -117,7 +157,12 @@ export class CartManagerMongo {
       const productToUpdate = await productManagerMongo.getProductById(pId);
 
       if (!productToUpdate) {
-        throw new Error("Product not found");
+        CustomError.createError({
+          name: "ERROR-FIND",
+          cause: "Error there's not product to delete ",
+          message: "The cart its empty!",
+          code: EErros.INVALID_TYPES_ERROR,
+        });
       }
 
       if (
@@ -137,9 +182,16 @@ export class CartManagerMongo {
         }
       );
 
-      return cartModel.findById(cId) + ` QUANTITY updated to ${quantity.quantity}`;
+      return (
+        cartModel.findById(cId) + ` QUANTITY updated to ${quantity.quantity}`
+      );
     } catch (error) {
-      throw new Error(error);
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error there's not product to delete ",
+        message: "The cart its empty!",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -170,7 +222,12 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      throw new Error(error);
+      CustomError.createError({
+        name: "ERROR-UPDATE",
+        cause: "Error there's not array to update ",
+        message: "The cart its empty!",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 
@@ -179,7 +236,12 @@ export class CartManagerMongo {
       await cartModel.findByIdAndUpdate(cId, { products: [] });
       return "Cart empty";
     } catch (error) {
-      throw new Error("Cart not found");
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Error there's not products in this cart to delete ",
+        message: "The cart its empty!",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     }
   }
 }

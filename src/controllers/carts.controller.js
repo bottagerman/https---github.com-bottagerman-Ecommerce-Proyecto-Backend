@@ -1,6 +1,8 @@
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
 import { userModel } from "../mongo/user.mongo.js";
 import { CartService } from "../service/cart.service.js";
+import EErros from "../service/error/enums.js";
+import CustomError from "../service/error/customErrors.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const cartService = new CartService();
@@ -12,10 +14,11 @@ export const createCart = async (req, res) => {
     req.session.user.cart = userCart._id;
     res.redirect(`/views/carts/${userCart._id}`);
   } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: "Error creating cart",
-      error: error.message,
+    CustomError.createError({
+      name: "ERROR-CREATE",
+      cause: "Error creating the cart",
+      message: "Error creating the cart",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -26,10 +29,11 @@ export const getCartById = async (req, res) => {
     const cart = await cartManagerMongo.getCartId(cartId);
     res.render("cartDetail", { cartId: cart._id, cart: cart });
   } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: "Cart not found",
-      error: error.message,
+    CustomError.createError({
+      name: "ERROR-FIND",
+      cause: "Error finding the cart by the id, check if the id exist!",
+      message: "Error finding the cart by the id, check if the id exist!",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -38,18 +42,19 @@ export const addProductToCart = async (req, res) => {
   try {
     const idCart = req.session.user.cart;
     const idProduct = req.params.pid;
-    console.log(idProduct)
+    console.log(idProduct);
     await cartService.addProductToCart(idCart, idProduct);
 
     let cartUpdated = await cartManagerMongo.getCartId(idCart);
     const myCart = cartUpdated.products.map((prod) => prod.toJSON());
 
-    res.render("cartDetail", { cart: myCart});
+    res.render("cartDetail", { cart: myCart });
   } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: "Error adding product to rs",
-      error: error.message,
+    CustomError.createError({
+      name: "ERROR-FIND",
+      cause: "Error adding the product to the cart, check if cid or pid are right!",
+      message: "Error adding the product to the cart, check if cid or pid are right!",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };
@@ -70,10 +75,11 @@ export const removeProductFromCart = async (req, res) => {
       data: updatedCart,
     });
   } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: "Error removing product from cart",
-      error: error.message,
+    CustomError.createError({
+      name: "ERROR-DELETE",
+      cause: "Error deleting the product from the cart, check if exist!",
+      message: "Error deleting the product from the cart, check if exist!",
+      code: EErros.DATABASES_READ_ERROR,
     });
   }
 };

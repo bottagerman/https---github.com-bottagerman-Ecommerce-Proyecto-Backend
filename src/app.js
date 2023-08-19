@@ -16,6 +16,7 @@ import { iniPassport } from "./config/passport.config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { routerPurchases } from "./routes/purchases.router.js";
+import errorHandler from "./middlewares/error.js"
 
 const app = express();
 const port = 8080;
@@ -66,14 +67,18 @@ app.use("/views/carts", routerCartViews);
 app.use("/views/purchases", routerPurchases)
 app.use("/", routerViews);
 
+
 // GLOBAL ENDPOINT
 app.get("*", (req, res) => {
   return res.status(404).json({
     status: "error",
     msg: "Oops, page not found!",
     data: {},
-  });ñ
+  });
 });
+
+//ERROR MIDDLEWARE
+app.use(errorHandler)
 
 // socketServer.on("connection", (socket) => {
 //   const updatedProducts = product.getUpdatedProducts();

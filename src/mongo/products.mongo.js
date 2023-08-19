@@ -1,19 +1,30 @@
 import { productsModel } from "../DAO/models/products.models.js";
+import CustomError from "../service/error/customErrors.js";
+import EErros from "../service/error/enums.js";
 
- export class ProductManagerMongo {
+export class ProductManagerMongo {
   constructor() {}
 
   #validateStringField(key, product) {
-    console.log(product[key]);
     if (!product[key]) {
-      throw new Error(`Error: Field ${key} is required`);
+      throw CustomError.createError({
+        name: "ERROR-CREATE",
+        cause: "Error theres not key",
+        message: "Not key of the product",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     } else if (
       product[key] === "" ||
       product[key] === undefined ||
       product[key] === null ||
       typeof product[key] !== "string"
     ) {
-      throw new Error(`Error: Field ${key} is invalid`);
+      throw CustomError.createError({
+        name: "ERROR-CREATE",
+        cause: "Error theres not key",
+        message: "Invalid key of the product",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     } else {
       return true;
     }
@@ -21,13 +32,23 @@ import { productsModel } from "../DAO/models/products.models.js";
 
   #validateNumberField(key, product) {
     if (product[key] === undefined) {
-      throw new Error(`Error: Field ${key} is required`);
+      throw CustomError.createError({
+        name: "ERROR-CREATE",
+        cause: "Error theres not key",
+        message: "Invalid key of the product",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     } else if (
       product[key] === NaN ||
       product[key] === null ||
       product[key] < 0
     ) {
-      throw new Error(`Error: Field ${key} is invalid`);
+      throw CustomError.createError({
+        name: "ERROR-CREATE",
+        cause: "Error theres not key",
+        message: "Invalid key of the product",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
     } else {
       return true;
     }
@@ -54,7 +75,14 @@ import { productsModel } from "../DAO/models/products.models.js";
         .catch((error) => {
           if (error.code === 11000) {
             console.log(error);
-            reject(new Error("Code field already exist in the db"));
+            reject(
+              CustomError.createError({
+                name: "ERROR-CREATE",
+                cause: "Error creating the product, check the code",
+                message: "Check the code of the products, theres an error",
+                code: EErros.INVALID_TYPES_ERROR,
+              })
+            );
           } else {
             reject(error);
           }
@@ -83,11 +111,25 @@ import { productsModel } from "../DAO/models/products.models.js";
           if (result) {
             resolve(result);
           } else {
-            reject(new Error("Product not found"));
+            reject(
+              CustomError.createError({
+                name: "ERROR-CREATE",
+                cause: "Error theres not product",
+                message: "Product not found",
+                code: EErros.INVALID_TYPES_ERROR,
+              })
+            );
           }
         })
         .catch((error) => {
-          reject(new Error("Product not found"));
+          reject(
+            CustomError.createError({
+              name: "ERROR-CREATE",
+              cause: "Error theres not product",
+              message: "Product not found",
+              code: EErros.INVALID_TYPES_ERROR,
+            })
+          );
         });
     });
   }
@@ -95,7 +137,14 @@ import { productsModel } from "../DAO/models/products.models.js";
   updateProduct(id, product) {
     return new Promise((resolve, reject) => {
       if (product.code) {
-        reject(new Error("Code can't be modified"));
+        reject(
+          CustomError.createError({
+            name: "ERROR-UPDATE",
+            cause: "You cant change the code field",
+            message: "Cant change the code field",
+            code: EErros.INVALID_TYPES_ERROR,
+          })
+        );
       }
 
       let newProductFields = Object.keys(product);
@@ -120,7 +169,14 @@ import { productsModel } from "../DAO/models/products.models.js";
             this.#validateNumberField(field, product);
           }
         } else {
-          reject(new Error("Product field not valid"));
+          reject(
+            CustomError.createError({
+              name: "ERROR-UPDATE",
+              cause: "Check out the fields that you want to change, theres something wrong",
+              message: "Check the fields",
+              code: EErros.INVALID_TYPES_ERROR,
+            })
+          );
         }
       });
 
@@ -130,11 +186,21 @@ import { productsModel } from "../DAO/models/products.models.js";
           if (result) {
             resolve(result);
           } else {
-            reject(new Error("Product not found"));
+            reject(   CustomError.createError({
+            name: "ERROR-FIND",
+            cause: "Error finding and updating the product",
+            message: "Error finding the product, check the code please",
+            code: EErros.INVALID_TYPES_ERROR,
+          }));
           }
         })
-        .catch((error) => {
-          reject(new Error("Product not found"));
+        .catch((e) => {
+          reject(CustomError.createError({
+            name: "ERROR-FIND",
+            cause: "Error finding and updating the product",
+            message: "Error finding the product, check the code please",
+            code: EErros.INVALID_TYPES_ERROR,
+          }));
         });
     });
   }
@@ -146,8 +212,13 @@ import { productsModel } from "../DAO/models/products.models.js";
         .then((result) => {
           resolve(result);
         })
-        .catch((error) => {
-          reject(error);
+        .catch((e) => {
+          reject(CustomError.createError({
+            name: "ERROR-DELETE",
+            cause: "You cant delete the product.",
+            message: "Cant delete the product.",
+            code: EErros.INVALID_TYPES_ERROR,
+          }));
         });
     });
   }
