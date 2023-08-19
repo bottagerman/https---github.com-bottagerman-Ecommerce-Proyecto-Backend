@@ -5,10 +5,9 @@ const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 
 export class CartService {
-
   async addProductToCart(cartId, productId) {
     const cart = await cartManagerMongo.getCartId({ _id: cartId });
-    
+
     if (cart) {
       const product = cart.products.find(
         (product) => product.product.toString() === productId
@@ -16,15 +15,18 @@ export class CartService {
       if (product) {
         product.quantity += 1;
       } else {
-        const productToAdd = await productManagerMongo.getProductById(productId);
+        const productToAdd = await productManagerMongo.getProductById(
+          productId
+        );
 
         if (productToAdd) {
           cart.products.push({
-            product: productToAdd._id,
+            product: productToAdd,
             quantity: 1,
           });
         }
       }
+      console.log(cart)
       await cart.save();
     }
   }

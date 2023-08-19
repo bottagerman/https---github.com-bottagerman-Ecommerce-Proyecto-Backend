@@ -37,17 +37,18 @@ export const getCartById = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     const idCart = req.session.user.cart;
-    const idProduct = req.params._id;
+    const idProduct = req.params.pid;
     console.log(idProduct)
     await cartService.addProductToCart(idCart, idProduct);
 
     let cartUpdated = await cartManagerMongo.getCartId(idCart);
+    const myCart = cartUpdated.products.map((prod) => prod.toJSON());
 
-    res.render("cartDetail", { cart: cartUpdated });
+    res.render("cartDetail", { cart: myCart});
   } catch (error) {
     res.status(404).json({
       status: "error",
-      message: "Error adding product to cart",
+      message: "Error adding product to rs",
       error: error.message,
     });
   }
