@@ -15,7 +15,7 @@ import passport from "passport";
 import { iniPassport } from "./config/passport.config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { routerPurchases } from "./routes/purchases.router.js";
+//import { routerPurchases } from "./routes/purchases.router.js";
 import errorHandler from "./middlewares/error.js"
 
 const app = express();
@@ -64,7 +64,7 @@ app.use("/api/sessions", routerLogin);
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
 app.use("/views/carts", routerCartViews);
-app.use("/views/purchases", routerPurchases)
+//app.use("/views/purchases", routerPurchases)
 app.use("/", routerViews);
 
 

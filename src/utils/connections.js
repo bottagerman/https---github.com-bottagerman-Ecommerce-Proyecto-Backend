@@ -1,5 +1,6 @@
 import { connect } from "mongoose";
-import CustomError from "../service/error/customErrors";
+import CustomError from "../service/error/customErrors.js";
+import EErros from "../service/error/enums.js";
 export async function connectMongo() {
   try {
     await connect(

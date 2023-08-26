@@ -1,4 +1,4 @@
-import EErros from "../service/error/enums";
+import EErros from "../service/error/enums.js";
 
 export default (error, req, res, next) => {
   switch (error.code) {

@@ -1,30 +1,32 @@
 
 <div>
-    <h1>
-      This is your cart! {{cart._id}}
-    </h1>
     <button >
       <a href="/views/products">GO TO PRODUCTS</a>
      </button>
     <button >
       <a href="/views/purchases">GO TO Ticket</a>
      </button>
+    <h1>
+      This is your cart! {{this._id}}
+    </h1>
 {{#each cart}}
+  {{#each this.products}}
     <li>
       <ul>
         <p>
-          Product ID: {{this.products._id}}
+          Product ID: {{this.product}}
         </p>
         <p>
-          Product name: {{this.products.name}}
+          Product name: {{this.product.name}}
         </p>
         <p>
           Product quantity: {{this.quantity}}
         </p>
         <p>
-          Product price: {{this.products.price}}
+          Product price: {{this.price}}
         </p>
       </ul>
     </li>
     {{/each}}
+{{/each}}
 </div>

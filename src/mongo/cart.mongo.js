@@ -15,14 +15,15 @@ export class CartManagerMongo {
         .then((cart) => {
           resolve(cart);
         })
-        .catch(
-          CustomError.createError({
+        .catch((error) => {
+          const customError = CustomError.createError({
             name: "ERROR-CREATE",
             cause: "Error creating cart",
             message: "Error creating a cart",
             code: EErros.INVALID_TYPES_ERROR,
-          })
-        );
+          });
+          reject(customError);
+        });
     });
   }
 
@@ -54,7 +55,6 @@ export class CartManagerMongo {
         });
       }
 
-
       let cart = await cartModel.findOneAndUpdate(
         { _id: cId, "products.product": productToAdd._id },
         {
@@ -70,10 +70,10 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-FIND",
         cause: "Error there's not cart to add the product ",
-        message: "Check if cart exist before try to add a product",
+        message: "Check if cart exists before trying to add a product",
         code: EErros.INVALID_TYPES_ERROR,
       });
     }
@@ -102,7 +102,6 @@ export class CartManagerMongo {
       let findIndexArray = cart.products.findIndex(
         (product) => product.product.toString() === pId
       );
- 
 
       if (cart.products[findIndexArray].quantity <= 1) {
         await cartModel.findByIdAndUpdate(cId, {
@@ -112,7 +111,7 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-FIND",
         cause: "Error there's not product to delete ",
         message: "The cart its empty!",
@@ -143,7 +142,7 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-FIND",
         cause: "Error there's not product to delete ",
         message: "The cart its empty!",
@@ -186,7 +185,7 @@ export class CartManagerMongo {
         cartModel.findById(cId) + ` QUANTITY updated to ${quantity.quantity}`
       );
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-FIND",
         cause: "Error there's not product to delete ",
         message: "The cart its empty!",
@@ -222,7 +221,7 @@ export class CartManagerMongo {
 
       return cartModel.findById(cId);
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-UPDATE",
         cause: "Error there's not array to update ",
         message: "The cart its empty!",
@@ -236,7 +235,7 @@ export class CartManagerMongo {
       await cartModel.findByIdAndUpdate(cId, { products: [] });
       return "Cart empty";
     } catch (error) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "ERROR-FIND",
         cause: "Error there's not products in this cart to delete ",
         message: "The cart its empty!",

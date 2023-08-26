@@ -1,6 +1,7 @@
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
 import { userModel } from "../mongo/user.mongo.js";
 import { CartService } from "../service/cart.service.js";
+import * as productController from "../controllers/products.controller.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
 
@@ -14,11 +15,10 @@ export const createCart = async (req, res) => {
     req.session.user.cart = userCart._id;
     res.redirect(`/views/carts/${userCart._id}`);
   } catch (error) {
-    CustomError.createError({
-      name: "ERROR-CREATE",
-      cause: "Error creating the cart",
+    res.status(500).json({
+      status: "error",
       message: "Error creating the cart",
-      code: EErros.DATABASES_READ_ERROR,
+      error: error.message,
     });
   }
 };
@@ -42,18 +42,22 @@ export const addProductToCart = async (req, res) => {
   try {
     const idCart = req.session.user.cart;
     const idProduct = req.params.pid;
-    console.log(idProduct);
     await cartService.addProductToCart(idCart, idProduct);
 
     let cartUpdated = await cartManagerMongo.getCartId(idCart);
-    const myCart = cartUpdated.products.map((prod) => prod.toJSON());
+    // Usar populate() para obtener los detalles completos de los productos en el carrito
+    await cartUpdated.populate("products.product")
 
-    res.render("cartDetail", { cart: myCart });
+    console.log(cartUpdated);
+
+    res.render("cartDetail", { cart: cartUpdated });
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
-      cause: "Error adding the product to the cart, check if cid or pid are right!",
-      message: "Error adding the product to the cart, check if cid or pid are right!",
+      cause:
+        "Error adding the product to the cart, check if cid or pid are right!",
+      message:
+        "Error adding the product to the cart, check if cid or pid are right!",
       code: EErros.DATABASES_READ_ERROR,
     });
   }
