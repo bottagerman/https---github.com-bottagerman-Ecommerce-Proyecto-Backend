@@ -48,9 +48,9 @@ export const addProductToCart = async (req, res) => {
     // Usar populate() para obtener los detalles completos de los productos en el carrito
     await cartUpdated.populate("products.product")
 
-    console.log(cartUpdated);
+    
 
-    res.render("cartDetail", { cart: cartUpdated });
+    res.render("cartDetail", { cartDetail: cartUpdated });
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",

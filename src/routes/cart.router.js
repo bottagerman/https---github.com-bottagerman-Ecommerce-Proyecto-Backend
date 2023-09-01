@@ -7,5 +7,5 @@ export const routerCart = express.Router();
 routerCart.post("/", checkCartSession, CartController.createCart);  
 routerCart.get("/:cid",checkCartSession, CartController.getCartById);  
 routerCart.post("/:cid/products/:pid", CartController.addProductToCart);  
-
+routerCart.get("/cid/purchase", )
 export default routerCart;

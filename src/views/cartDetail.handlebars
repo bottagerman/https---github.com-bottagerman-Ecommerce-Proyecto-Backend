@@ -1,32 +1,33 @@
-
 <div>
-    <button >
-      <a href="/views/products">GO TO PRODUCTS</a>
-     </button>
-    <button >
-      <a href="/views/purchases">GO TO Ticket</a>
-     </button>
-    <h1>
-      This is your cart! {{this._id}}
-    </h1>
-{{#each cart}}
-  {{#each this.products}}
-    <li>
-      <ul>
-        <p>
-          Product ID: {{this.product}}
-        </p>
-        <p>
-          Product name: {{this.product.name}}
-        </p>
-        <p>
-          Product quantity: {{this.quantity}}
-        </p>
-        <p>
-          Product price: {{this.price}}
-        </p>
-      </ul>
-    </li>
+  <h1>
+    This is your cart! {{cartId}}
+  </h1>
+  <ul>
+    {{#each cartDetail.products}}
+      <li>
+        <ul>
+          <p>
+            Product ID: {{this.product._id}}
+          </p>
+          <p>
+            Product name: {{this.detail.name}}
+          </p>
+          <p>
+            Product quantity: {{this.quantity}}
+          </p>
+          <p>
+            Product price: {{this.detail.price}}
+          </p>
+        </ul>
+      </li>
     {{/each}}
-{{/each}}
+  </ul>
+  <form action="/api/{{cartId}}/purchase" method="GET">
+    <button>
+      GO TO TICKET
+    </button>
+  </form>
+  <button>
+    <a href="/views/products">GO TO PRODUCTS</a>
+  </button>
 </div>

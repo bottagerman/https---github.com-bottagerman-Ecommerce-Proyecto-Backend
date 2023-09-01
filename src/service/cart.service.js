@@ -23,12 +23,12 @@ export class CartService {
 
           if (productToAdd) {
             cart.products.push({
-              product: productToAdd,
+              product: productToAdd._id,
+              detail: productToAdd,
               quantity: 1,
             });
           }
         }
-        console.log(cart);
         await cart.save();
       }
     } catch (e) {
