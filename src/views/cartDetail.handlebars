@@ -3,14 +3,14 @@
     This is your cart! {{cartId}}
   </h1>
   <ul>
-    {{#each cartDetail.products}}
+    {{#each cartDetail}}
       <li>
         <ul>
           <p>
-            Product ID: {{this.product._id}}
+            Product ID: {{this._id}}
           </p>
           <p>
-            Product name: {{this.detail.name}}
+            Product name: {{this.products.product.name}}
           </p>
           <p>
             Product quantity: {{this.quantity}}

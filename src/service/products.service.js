@@ -28,4 +28,7 @@ class ProductService {
       throw new Error("Error creating product");
     }
   }
+  async productDiscount(){
+
+  }
 }

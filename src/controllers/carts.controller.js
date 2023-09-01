@@ -46,9 +46,7 @@ export const addProductToCart = async (req, res) => {
 
     let cartUpdated = await cartManagerMongo.getCartId(idCart);
     // Usar populate() para obtener los detalles completos de los productos en el carrito
-    await cartUpdated.populate("products.product")
-
-    
+    await cartUpdated.populate("products.product");
 
     res.render("cartDetail", { cartDetail: cartUpdated });
   } catch (error) {
@@ -84,6 +82,29 @@ export const removeProductFromCart = async (req, res) => {
       cause: "Error deleting the product from the cart, check if exist!",
       message: "Error deleting the product from the cart, check if exist!",
       code: EErros.DATABASES_READ_ERROR,
+    });
+  }
+};
+
+export const purchaseCart = async (req, res) => {
+  try {
+    const userId = req.session.user._id; // Obtén el ID del usuario actual
+    const cartId = req.session.user.cart; // Obtén el ID del carrito actual
+
+    const ticket = await cartService.purchase(cartId, userId);
+
+    // Puedes redirigir a una página de confirmación de compra o hacer lo que desees con el ticket aquí
+
+    res.status(200).json({
+      status: "success",
+      message: "Compra realizada con éxito",
+      ticket: ticket,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error al finalizar la compra",
+      error: error.message,
     });
   }
 };
