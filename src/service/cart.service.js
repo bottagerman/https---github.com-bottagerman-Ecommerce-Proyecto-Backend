@@ -1,11 +1,12 @@
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
 import { ProductManagerMongo } from "../mongo/products.mongo.js";
-import { ticketModel } from "../DAO/models/ticket.model.js";
+import { TicketService } from "./ticket.service.js";
 import CustomError from "./error/customErrors.js";
+import EErros from "./error/enums.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
-
+const ticketService = new TicketService();
 export class CartService {
   async addProductToCart(cartId, productId) {
     try {
@@ -43,24 +44,24 @@ export class CartService {
   }
   async purchase(cartId, userId) {
     try {
-      // Obtén el carrito por su ID
       const cart = await cartManagerMongo.getCartId(cartId);
 
-      // Calcula el precio total sumando los precios de los productos en el carrito
       let totalPrice = 0;
       for (const product of cart.products) {
         totalPrice += product.detail.price * product.quantity;
       }
 
-      // Crea un nuevo ticket
-      const ticket = await ticketModel.create({
-        code: generateTicketCode(), // Genera un código de ticket único
-        date_time: Date.now(),
+      const ticketCode = Math.floor(Math.random() * 900) + 100;
+
+      const date_time = Date.now();
+
+      const ticket = await ticketService.createTicket({
+        code: ticketCode,
+        date_time: date_time,
         amount: totalPrice,
-        purchaser: userId, // El ID del usuario que realiza la compra
+        purchaser: userId, 
       });
 
-      // Elimina el carrito de la colección "carts"
       await cartManagerMongo.deleteAllProductsFromCart(cartId);
 
       return ticket;
