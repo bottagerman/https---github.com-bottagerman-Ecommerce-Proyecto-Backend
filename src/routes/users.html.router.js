@@ -1,10 +1,11 @@
 import express from 'express';
 import { UserModel } from '../DAO/models/users.models.js';
+import { loggerDev } from '../utils/logger.js';
 
 export const usersHtmlRouter = express.Router();
 usersHtmlRouter.get('/', async (req, res) => {
   const { page } = req.query;
-  console.log(page);
+  loggerDev.info(page);
   const users = await UserModel.paginate({}, { limit: /*  limit || */ 10, page: page || 1 });
   let usuarios = users.docs.map((user) => {
     return {

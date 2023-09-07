@@ -1,6 +1,7 @@
 import { productsModel } from "../DAO/models/products.models.js";
 import CustomError from "../service/error/customErrors.js";
 import EErros from "../service/error/enums.js";
+import { loggerDev } from "../utils/logger.js";
 
 export class ProductManagerMongo {
   constructor() {}
@@ -74,7 +75,7 @@ export class ProductManagerMongo {
         })
         .catch((error) => {
           if (error.code === 11000) {
-            console.log(error);
+            loggerDev.error(error);
             reject(
               CustomError.createError({
                 name: "ERROR-CREATE",

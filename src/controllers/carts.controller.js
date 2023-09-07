@@ -4,6 +4,7 @@ import { CartService } from "../service/cart.service.js";
 import * as productController from "../controllers/products.controller.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
+import { loggerDev } from "../utils/logger.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const cartService = new CartService();
@@ -11,7 +12,7 @@ const cartService = new CartService();
 export const createCart = async (req, res) => {
   try {
     const userCart = await cartManagerMongo.createCart();
-    console.log(userCart._id.toString());
+    loggerDev.info(userCart._id.toString());
     req.session.user.cart = userCart._id;
     res.redirect(`/views/carts/${userCart._id}`);
   } catch (error) {

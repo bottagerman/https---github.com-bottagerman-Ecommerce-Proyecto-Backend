@@ -1,5 +1,6 @@
 //PRODUCT MANAGER
 import fs from "fs";
+import { loggerDev } from "../../utils/logger";
 
 export class ProductManager {
     #path;
@@ -11,7 +12,7 @@ export class ProductManager {
   
     getProducts() {
       this.products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
-      console.log(this.products);
+      loggerDev.info(this.products);
       return this.products;
     }
     #generateId() {
@@ -39,7 +40,7 @@ export class ProductManager {
       this.products = JSON.parse(fs.readFileSync(this.#path, "utf-8"));
       const existInArray = this.products.find((p) => p.code === code);
       if (existInArray) {
-        console.log("Product not found");
+        loggerDev.warn("Product not found");
         return true;
       } else {
         return false;
@@ -59,7 +60,7 @@ export class ProductManager {
         !code ||
         this.#getProductByCode(code)
       ) {
-        return console.log(
+        return loggerDev.error(
           "ERROR!, you can't left a field without complete or repeat the code, please try again"
         );
       } else {

@@ -1,4 +1,5 @@
 import { productModel } from "../mongo/products.mongo";
+import { loggerDev } from "../utils/logger";
 
 class ProductService {
   async createNewProduct(
@@ -24,7 +25,7 @@ class ProductService {
       );
       return newProduct
     } catch (e) {
-      console.log(e);
+      loggerDev.error(e);
       throw new Error("Error creating product");
     }
   }

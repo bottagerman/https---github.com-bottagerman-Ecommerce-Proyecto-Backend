@@ -3,6 +3,7 @@ import passport from 'passport';
 import { UserModel } from '../DAO/models/users.models.js';
 import fetch from 'node-fetch';
 import GitHubStrategy from 'passport-github2';
+import { loggerDev } from '../utils/logger.js';
 
 export function iniPassport() {
   passport.use(
@@ -14,7 +15,7 @@ export function iniPassport() {
         callbackURL: 'http://localhost:8080/api/sessions/githubcallback',
       },
       async (accesToken, _, profile, done) => {
-        console.log(profile);
+        loggerDev.info(profile);
         try {
           const res = await fetch('https://api.github.com/user/emails', {
             headers: {
@@ -41,15 +42,15 @@ export function iniPassport() {
               admin: false,
             };
             let userCreated = await UserModel.create(newUser);
-            console.log('User Registration succesful');
+            loggerDev.info('User Registration succesful');
             return done(null, userCreated);
           } else {
-            console.log('User already exists');
+            loggerDev.warn('User already exists');
             return done(null, user);
           }
         } catch (e) {
-          console.log('Error en auth github');
-          console.log(e);
+          loggerDev.error('Error en auth github');
+          loggerDev.error(e);
           return done(e);
         }
       }

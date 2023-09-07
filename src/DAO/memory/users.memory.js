@@ -1,3 +1,4 @@
+import { loggerDev } from "../../utils/logger.js";
 import { isValidPassword, createHash } from "../utils/bcrypt.js";
 
 class UsersMemory {
@@ -7,7 +8,7 @@ class UsersMemory {
 
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      console.log(
+      loggerDev.warn(
         "Validation error: please complete firstName, lastname and email."
       );
       throw new Error(
@@ -34,7 +35,7 @@ class UsersMemory {
         throw new Error("Invalid email or password");
       }
     } catch (e) {
-      console.log(e);
+      loggerDev.error(e);
       throw new Error("Error finding user");
     }
   }
@@ -52,7 +53,7 @@ class UsersMemory {
       };
       this.users.push(newUser);
     } catch (e) {
-      console.log(e);
+      loggerDev.error(e);
       throw new Error("Error creating user");
     }
   }
