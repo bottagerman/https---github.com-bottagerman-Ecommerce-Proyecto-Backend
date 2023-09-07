@@ -15,8 +15,8 @@ import passport from "passport";
 import { iniPassport } from "./config/passport.config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-//import { routerPurchases } from "./routes/purchases.router.js";
 import errorHandler from "./middlewares/error.js"
+import { logger } from "./utils/logger.js";
 
 const app = express();
 const port = 8080;
@@ -64,7 +64,6 @@ app.use("/api/sessions", routerLogin);
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
 app.use("/views/carts", routerCartViews);
-//app.use("/views/purchases", routerPurchases)
 app.use("/", routerViews);
 
 
@@ -102,5 +101,5 @@ app.use(errorHandler)
 // });
 
 httpServer.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  logger.info(`Example app listening on port ${port}`)
 });
