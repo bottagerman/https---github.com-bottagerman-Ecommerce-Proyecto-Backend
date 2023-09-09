@@ -15,8 +15,10 @@ import passport from "passport";
 import { iniPassport } from "./config/passport.config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import errorHandler from "./middlewares/error.js"
-import { logger } from "./utils/logger.js";
+import errorHandler from "./middlewares/error.js";
+import { loggerDev } from "./utils/logger.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const app = express();
 const port = 8080;
@@ -26,6 +28,26 @@ connectMongo();
 
 const httpServer = createServer(app);
 const socketServer = new Server(httpServer);
+
+//SWAGGER CONFIGURATION
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+
+    info: {
+      title: "Documentation Signature Guitar Shop!",
+
+      description: "E-commerce de guitarras premium",
+    },
+  },
+
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -60,12 +82,10 @@ app.use("/api/carts", routerCart);
 app.use("/api/users", routerUsers);
 app.use("/api/sessions", routerLogin);
 
-
 // ALL MY HTML ENDPOINTS
 app.use("/views/products", routerProductsView);
 app.use("/views/carts", routerCartViews);
 app.use("/", routerViews);
-
 
 // GLOBAL ENDPOINT
 app.get("*", (req, res) => {
@@ -77,7 +97,7 @@ app.get("*", (req, res) => {
 });
 
 //ERROR MIDDLEWARE
-app.use(errorHandler)
+app.use(errorHandler);
 
 // socketServer.on("connection", (socket) => {
 //   const updatedProducts = product.getUpdatedProducts();
@@ -101,5 +121,5 @@ app.use(errorHandler)
 // });
 
 httpServer.listen(port, () => {
-  logger.info(`Example app listening on port ${port}`)
+  loggerDev.info(`Example app listening on port ${port}`);
 });
