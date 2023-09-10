@@ -1,48 +1,69 @@
 paths:
-  /api/users:
+  /api/products:
     get:
-      summary: Obtiene todos los usuarios
+      summary: Obtiene todos los productos
       tags:
-        - Users
+        - products
       responses:
         "200":
-          description: Los usuarios fueron devueltos satisfactoriamente
+          description: Los productos fueron entregados exitosamente 
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#components/schemas/User"
+                  $ref: "#components/schemas/Products"
         "500":
-          description: Error del servidor. Usualmente generando la query o falla la conexion a la DB
-  /api/users/{uid}:
-    get:
-      summary: Obtiene un user
+          description: Error en la conexion a la db
+    post:
+      summary: Crea un nuevo producto
       tags:
-        - Users
+        - products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: El producto fue creado con exito 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Products"
+        "500":
+          description: Error en la conexion a la db
+  /api/products/{id}:
+    get:
+      summary: Obtiene un producto
+      tags:
+        - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           required: true
-          description: ID del usuario que se busca
+          description: Id del producto deseado 
           schema:
             $type: String
       responses:
         "200":
-          description: Usuario encontrado
+          description: Producto encontrado
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/User"
+                $ref: "#components/schemas/Products"
     put:
-      summary: Actualizar un user a partir del ID
+      summary: Actualizar un producto a partir del ID
       tags:
-        - Users
+        - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           required: true
-          description: ID del usuario que se busca
+          description: ID del producto que desea modificar 
           schema:
             $type: String
       requestBody:
@@ -50,10 +71,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/requestBodies/updateUser"
+              $ref: "#components/requestBodies/updateProduct"
       responses:
         "200":
-          description: Usuario modificado exitosamente
+          description: Producto modificado exitosamente
           content:
             application/json:
               schema:
@@ -72,27 +93,81 @@ components:
       example:
         status: success
         message: User updated
-    User:
+    Products:
       type: object
       properties:
         _id:
           type: ObjectId
           description: ID auto generado by mongo
-        first_name:
+        name:
           type: String
-          description: Primer nombre
-        last_name:
+          description: Nombre del producto
+        description:
           type: String
-          description: Apellido
-        email:
+          description: Descripcion del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Stock del producto
+        thumbnails:
           type: String
-          description: Email de usuario
-        password:
+          description: Fotos del producto
+        status:
+          type: Boolean
+          description: Estado del producto
+        code:
           type: String
-          description: Password hasheado del user
+          description: Codigo del producto
+        category:
+          type: String
+          description: Categoria del producto
       example:
-        _id: ObjectId("644081a93f0625dc193bc594")
-        first_name: Adrian
-        last_name: Campo
-        email: atrian@gmail.com
-        password: $2b$10$Cf.uErjQ/lEzypTNfyE1IuFGxVXSRqGzjFWBYwL9KLK4Fe29kvu
+        _id: ObjectId("6489cd9ba9cf74d0e1377eac")
+        name: Kramer Baretta
+        description: Kramer Baretta Pappo's signature
+        price: 11000
+        stock: 10
+        thumbnail: no image
+        status: true
+        code: papp2
+        category: electric guitar
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        name:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Stock del producto
+        thumbnails:
+          type: String
+          description: Fotos del producto
+        status:
+          type: Boolean
+          description: Estado del producto
+        code:
+          type: String
+          description: Codigo del producto
+        category:
+          type: String
+          description: Categoria del producto
+      example:
+        _id: ObjectId("6489cd9ba9cf74d0e1377eac")
+        name: Kramer Baretta
+        description: Kramer Baretta Pappo's signature
+        price: 11000
+        stock: 10
+        thumbnail: no image
+        status: true
+        code: papp2
+        category: electric guitar

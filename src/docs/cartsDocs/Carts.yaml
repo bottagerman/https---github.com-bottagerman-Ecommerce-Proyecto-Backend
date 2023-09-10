@@ -1,63 +1,42 @@
 paths:
-  /api/users:
+  /api/carts/{cid}:
     get:
-      summary: Obtiene todos los usuarios
+      summary: Obtiene un cart
       tags:
-        - Users
-      responses:
-        "200":
-          description: Los usuarios fueron devueltos satisfactoriamente
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/User"
-        "500":
-          description: Error del servidor. Usualmente generando la query o falla la conexion a la DB
-  /api/users/{uid}:
-    get:
-      summary: Obtiene un user
-      tags:
-        - Users
+        - cart
       parameters:
-        - name: uid
+        - name: cid
           in: path
           required: true
-          description: ID del usuario que se busca
+          description: ID del cart que se desea 
           schema:
             $type: String
       responses:
         "200":
-          description: Usuario encontrado
+          description: Cart encontrado
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/User"
-    put:
-      summary: Actualizar un user a partir del ID
+                $ref: "#components/schemas/Cart"
+  /api/carts/{cid}/products/{pid}:
+   post:
+      summary: Selecciona un producto para agregar al carrito
       tags:
-        - Users
+        - cart
       parameters:
-        - name: uid
+        - name: cid, pid
           in: path
           required: true
-          description: ID del usuario que se busca
+          description: ID del cart y del producto que quiere comprar
           schema:
             $type: String
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#components/requestBodies/updateUser"
       responses:
         "200":
-          description: Usuario modificado exitosamente
+          description: Cart encontrado y producto agregado correctamente
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Success"
+                $ref: "#components/schemas/Cart"
 components:
   schemas:
     Success:
@@ -71,28 +50,25 @@ components:
           description: aclarando que ocurrio
       example:
         status: success
-        message: User updated
+        message: Cart updated
     User:
       type: object
       properties:
         _id:
           type: ObjectId
           description: ID auto generado by mongo
-        first_name:
-          type: String
-          description: Primer nombre
-        last_name:
-          type: String
-          description: Apellido
-        email:
-          type: String
-          description: Email de usuario
-        password:
-          type: String
-          description: Password hasheado del user
+        products:
+          type: Array
+          description: Array de los productos
+        product:
+          type: ObjectId
+          description: Id del producto seleccionado
+        quantity:
+          type: Number
+          description: Cantidad de productos dentro del cart
       example:
-        _id: ObjectId("644081a93f0625dc193bc594")
-        first_name: Adrian
-        last_name: Campo
-        email: atrian@gmail.com
-        password: $2b$10$Cf.uErjQ/lEzypTNfyE1IuFGxVXSRqGzjFWBYwL9KLK4Fe29kvu
+        _id: ObjectId("64ef71228feddb68f2bded92")
+        products: []
+        quantity: Number
+  
+
