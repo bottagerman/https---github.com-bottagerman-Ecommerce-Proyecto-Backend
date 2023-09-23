@@ -1,4 +1,3 @@
-//@ts-check
 import passport from 'passport';
 import { UserModel } from '../DAO/models/users.models.js';
 import fetch from 'node-fetch';

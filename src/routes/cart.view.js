@@ -12,4 +12,4 @@ const productManagerMongo = new ProductManagerMongo();
 
 routerCartViews.get("/:cid", cartController.getCartById);
 
-routerCartViews.post("/", checkCartSession, cartController.createCart);
+routerCartViews.post("/", cartController.createCart);
