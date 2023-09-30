@@ -26,7 +26,6 @@ export class CartService {
           if (productToAdd) {
             cart.products.push({
               product: productToAdd._id,
-              detail: productToAdd,
               quantity: 1,
             });
           }

@@ -100,3 +100,27 @@ export const updateProduct = async (req, res) => {
     });
   }
 };
+export const getLimitProduct = async (req, res) => {
+  const limit = req.query.limit || 10;
+  const sort = req.query.sort === "desc" ? "-price" : "price";
+  const allProducts = await productService.getProductsLimit({
+    limit,
+    sort,
+  });
+  res.status(200).render("products", {
+    allProducts: allProducts.docs.map((product) => ({
+      title: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      id: product._id,
+      cart: req.session.user.cart,
+    })),
+    totalPages: allProducts.totalPages,
+    prevPage: allProducts.prevPage,
+    nextPage: allProducts.nextPage,
+    page: allProducts.page,
+    hasPrevPage: allProducts.hasPrevPage,
+    hasNextPage: allProducts.hasNextPage,
+  });
+};

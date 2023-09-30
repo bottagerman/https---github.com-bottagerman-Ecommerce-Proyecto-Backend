@@ -4,7 +4,8 @@ import { checkCartSession } from "../middlewares/auth.js";
 export const routerCart = express.Router();
 
 routerCart.post("/", checkCartSession, CartController.createCart);  
-routerCart.get("/:cid",checkCartSession, CartController.getCartById);  
+routerCart.get("/:cid",checkCartSession, CartController.getCartById);
+routerCart.delete("/:cid/products/:pid", CartController.removeProductFromCart)  
 routerCart.post("/:cid/products/:pid", CartController.addProductToCart);  
 routerCart.post("/:cid/purchase", CartController.purchaseCart )
 export default routerCart;

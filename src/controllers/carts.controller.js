@@ -5,9 +5,11 @@ import * as productController from "../controllers/products.controller.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
 import { loggerDev } from "../utils/logger.js";
+import { ProductManagerMongo } from "../mongo/products.mongo.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const cartService = new CartService();
+const productManagerMongo = new ProductManagerMongo();
 
 export const createCart = async (req, res) => {
   try {
@@ -47,9 +49,21 @@ export const addProductToCart = async (req, res) => {
 
     let cartUpdated = await cartManagerMongo.getCartId(idCart);
     // Usar populate() para obtener los detalles completos de los productos en el carrito
-    await cartUpdated.populate("products.product");
+    cartUpdated.populate("products.product");
 
-    res.render("cartDetail", { cartDetail: cartUpdated });
+    loggerDev.info(cartUpdated);
+
+    const products = cartUpdated.products;
+
+    for (const product of products) {
+      const productsDetail = await productManagerMongo.getProductById(
+        product.product
+      );
+      loggerDev.info(productsDetail);
+    }
+
+    res.render("cartProducts", { cartUpdated: products });
+
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
