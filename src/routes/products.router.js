@@ -1,4 +1,5 @@
 import express from "express";
+import { checkCart } from "../middlewares/auth.js";
 import * as ProductController from "../controllers/products.controller.js";
 
 export const routerProducts = express.Router();

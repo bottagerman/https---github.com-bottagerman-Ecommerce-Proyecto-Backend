@@ -58,7 +58,7 @@ export class CartService {
         code: ticketCode,
         date_time: date_time,
         amount: totalPrice,
-        purchaser: userId, 
+        purchaser: userId,
       });
 
       await cartManagerMongo.deleteAllProductsFromCart(cartId);
@@ -68,5 +68,12 @@ export class CartService {
       // Maneja los errores apropiadamente
       throw new Error("Error al finalizar la compra");
     }
+  }
+  async readAndRender(cartId) {
+    const cart = await cartManagerMongo.readAndRender(cartId);
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+    return cart;
   }
 }

@@ -30,7 +30,7 @@ export const getCartById = async (req, res) => {
   try {
     const cartId = req.params.cid;
     const cart = await cartManagerMongo.getCartId(cartId);
-    res.render("cartDetail", { cartId: cart._id, cart: cart });
+    res.status(200).json({status:true, data: cart});
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
@@ -45,25 +45,9 @@ export const addProductToCart = async (req, res) => {
   try {
     const idCart = req.session.user.cart;
     const idProduct = req.params.pid;
-    await cartService.addProductToCart(idCart, idProduct);
-
-    let cartUpdated = await cartManagerMongo.getCartId(idCart);
-    // Usar populate() para obtener los detalles completos de los productos en el carrito
-    cartUpdated.populate("products.product");
-
-    loggerDev.info(cartUpdated);
-
-    const products = cartUpdated.products;
-
-    for (const product of products) {
-      const productsDetail = await productManagerMongo.getProductById(
-        product.product
-      );
-      loggerDev.info(productsDetail);
-    }
-
-    res.render("cartProducts", { cartUpdated: products });
-
+    const cartUpdated = await cartService.addProductToCart(idCart, idProduct);
+    loggerDev.info(idProduct)
+    res.status(200).redirect({ status: true, data: cartUpdated });
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
@@ -75,6 +59,20 @@ export const addProductToCart = async (req, res) => {
     });
   }
 };
+
+export const readAndRender = async (req, res) => {
+  try {
+    const cartId = req.session.user.cart;
+    const cart = await cartService.readAndRender(cartId);
+    const title = "Products in the cart";
+    const { firstName, role, email } = req.session.user;
+    const myCart = cart.products.map(doc => doc.toObject());
+    res.status(200).render("cartProducts", { myCart, cartId, title, firstName, role, email });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 
 export const removeProductFromCart = async (req, res) => {
   try {

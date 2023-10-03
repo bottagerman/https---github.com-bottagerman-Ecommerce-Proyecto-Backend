@@ -1,27 +1,28 @@
 <div>
-    {{#if cartUpdated}}
-     {{#each this.products}}
-        <li>
-          <ul>
-            <p>
-              Product ID: {{this._id}}
-            </p>
-            <p>
-              Product name: {{this.name}}
-            </p>
-            <p>
-              Product description: {{this.description}}
-            </p>
-            <p>
-              Product quantity: {{this.quantity}}
-            </p>
-            <p>
-              Product price: {{this.price}}
-            </p>
-          </ul>
-        </li>
-      {{/each}}
-      <form action="/api/carts/{{this._id}}/purchase" method="POST">
+  <h1>HEY {{firstName}} this is your cart! {{cartId}}</h1>
+  {{#if myCart.lenght}}
+  {{#each myCart}}
+    <li>
+      <ul>
+        <p>
+          Product ID: {{this.product._id}}
+        </p>
+        <p>
+          Product name: {{this.product.name}}
+        </p>
+        <p>
+          Product description: {{this.product.description}}
+        </p>
+        <p>
+          Product quantity: {{this.quantity}}
+        </p>
+        <p>
+          Product price: {{this.product.price}}
+        </p>
+      </ul>
+    </li>
+  {{/each}}
+      <form action="/api/carts/{{cartId}}/purchase" method="POST">
         <button>
           GO TO TICKET
         </button>

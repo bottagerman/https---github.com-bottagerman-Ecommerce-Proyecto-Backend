@@ -16,12 +16,13 @@
     <p class="card-text">{{this.stock}}</p>
     <button class="btn btn-primary">+</button>
     </div>
+    {{#if cart}}
     <div style="margin-top: 10px;">
-    <a href="#" class="btn btn-primary">Detail</a>
-<form action="/api/carts/{{cart}}/products/{{this.id}}" method="POST">
-    <button type="submit" class="btn btn-primary">add to cart</button>
+    <form action="/api/carts/{{cart}}/products/{{this.id}}" method="POST">
+    <button type="submit" class="btn btn-primary">{{this.id}}</button>
     </div>
     </form>
+    {{/if}}
   </div>
 </div>
   {{/each}}

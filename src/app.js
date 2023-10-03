@@ -99,27 +99,6 @@ app.get("*", (req, res) => {
 //ERROR MIDDLEWARE
 app.use(errorHandler);
 
-// socketServer.on("connection", (socket) => {
-//   const updatedProducts = product.getUpdatedProducts();
-//   if (updatedProducts.length > 0) {
-//     socket.emit("products", updatedProducts);
-//   }
-
-//   socket.on("addProduct", (data) => {
-//     product.addProduct(
-//       data.title,
-//       data.description,
-//       data.price,
-//       data.category,
-//       data.thumbnail,
-//       data.stock,
-//       data.code
-//     );
-//     const updatedProducts = product.getProducts();
-//     socketServer.emit("products", updatedProducts);
-//   });
-// });
-
 httpServer.listen(port, () => {
   loggerDev.info(`Example app listening on port ${port}`);
 });

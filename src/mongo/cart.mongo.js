@@ -243,4 +243,12 @@ export class CartManagerMongo {
       });
     }
   }
+  async readAndRender(cartId) {
+		try {
+			const cart = await cartModel.findById(cartId).populate("products.product");
+			return cart;
+		} catch (e) {
+			logger.info(e);
+		}
+	}
 }
