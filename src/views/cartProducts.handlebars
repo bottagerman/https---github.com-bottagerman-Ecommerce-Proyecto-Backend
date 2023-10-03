@@ -1,6 +1,6 @@
 <div>
-  <h1>HEY {{firstName}} this is your cart! {{cartId}}</h1>
-  {{#if myCart.lenght}}
+  <h1>HEY {{firstName}} this are your {{title}}</h1>
+ 
   {{#each myCart}}
     <li>
       <ul>
@@ -22,6 +22,7 @@
       </ul>
     </li>
   {{/each}}
+
       <form action="/api/carts/{{cartId}}/purchase" method="POST">
         <button>
           GO TO TICKET
@@ -30,5 +31,4 @@
       <button>
         <a href="/views/products">GO TO PRODUCTS</a>
       </button>
-    {{/if}}
 </div>

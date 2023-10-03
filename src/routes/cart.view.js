@@ -5,5 +5,5 @@ import { checkCartSession } from "../middlewares/auth.js";
 export const routerCartViews = Router();
 
 
-routerCartViews.get("/:cid", checkCartSession, cartController.readAndRender);
+routerCartViews.get("/:cid", cartController.readAndRender);
 routerCartViews.post("/", checkCartSession, cartController.createCart);

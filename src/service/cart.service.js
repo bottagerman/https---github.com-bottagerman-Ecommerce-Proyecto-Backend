@@ -8,30 +8,37 @@ const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 const ticketService = new TicketService();
 export class CartService {
-  async addProductToCart(cartId, productId) {
+  async addProductToCart(cid, pid) {
     try {
-      const cart = await cartManagerMongo.getCartId({ _id: cartId });
+      const cart = await cartManagerMongo.getCartId(cid);
+      const product = await productManagerMongo.getProductById(pid);
 
-      if (cart) {
-        const product = cart.products.find(
-          (product) => product.product.toString() === productId
-        );
-        if (product) {
-          product.quantity += 1;
-        } else {
-          const productToAdd = await productManagerMongo.getProductById(
-            productId
-          );
-
-          if (productToAdd) {
-            cart.products.push({
-              product: productToAdd._id,
-              quantity: 1,
-            });
-          }
-        }
-        await cart.save();
+      if (!cart) {
+        throw new Error("Cart not found");
       }
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      const existingProduct = cart.products.find(
+        (item) => item.product.toString() === product._id.toString()
+      );
+
+      if (existingProduct) {
+        existingProduct.quantity++;
+      } else {
+        cart.products.push({ product: product._id, quantity: 1 });
+      }
+
+      await cart.save();
+
+      const updatedCart = await this.getCartId(cid);
+      const cartQuantity = updatedCart.products.reduce(
+        (total, product) => total + product.quantity,
+        0
+      );
+
+      return { cart: updatedCart, cartQuantity };
     } catch (e) {
       CustomError.createError({
         name: "ERROR-MONGO",

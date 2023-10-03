@@ -4,7 +4,7 @@ import CustomError from "../service/error/customErrors.js";
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
 
 const productService = new ProductManagerMongo();
-const cartService = new CartManagerMongo()
+const cartService = new CartManagerMongo();
 
 export const getProductById = async (req, res) => {
   try {
@@ -105,8 +105,10 @@ export const updateProduct = async (req, res) => {
 export const getLimitProduct = async (req, res) => {
   const limit = req.query.limit || 10;
   const sort = req.query.sort === "desc" ? "-price" : "price";
-  const cart = await cartService.createCart()
-  req.session.user.cart = cart._id;
+  if (!req.session.user.cart) {
+    const cart = await cartService.createCart();
+    req.session.user.cart = cart._id;
+  }
   const allProducts = await productService.getProductsLimit({
     limit,
     sort,

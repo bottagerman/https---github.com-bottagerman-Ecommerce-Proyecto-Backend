@@ -43,11 +43,9 @@ export const getCartById = async (req, res) => {
 
 export const addProductToCart = async (req, res) => {
   try {
-    const idCart = req.session.user.cart;
-    const idProduct = req.params.pid;
-    const cartUpdated = await cartService.addProductToCart(idCart, idProduct);
-    loggerDev.info(idProduct)
-    res.status(200).redirect({ status: true, data: cartUpdated });
+    const {cid, pid} = req.params
+    const cartUpdated = await cartService.addProductToCart(cid, pid);
+    res.status(200).json({ status: "success", data: cartUpdated });
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
@@ -72,7 +70,6 @@ export const readAndRender = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 }
-
 
 export const removeProductFromCart = async (req, res) => {
   try {
