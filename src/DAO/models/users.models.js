@@ -20,12 +20,15 @@ const schema = new Schema({
     max: 100,
     unique: true,
   },
-
   admin: {
     type: Boolean,
   },
   age: {
     type: Number,
+  },
+  premium:{
+    type: Boolean,
+    default: "user",
   },
   cart: {
     type: String,

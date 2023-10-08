@@ -6,3 +6,4 @@ export const routerUsers = express.Router();
 routerUsers.get("/", UserController.getAllUsers);
 routerUsers.delete("/:id", UserController.deleteUser);
 routerUsers.put("/:id", UserController.updateUser);
+routerUsers.get("/premium/:uid", UserController.changeToPremium);

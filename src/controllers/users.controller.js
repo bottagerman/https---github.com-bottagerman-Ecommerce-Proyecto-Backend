@@ -95,8 +95,10 @@ export const updateUser = async (req, res) => {
   } catch (error) {
     CustomError.createError({
       name: "ERROR-UPDATE",
-      cause: "Error updating this user, check all the fields that you want to change or look the id",
-      message: "Error updating this user, check all the fields that you want to change or look the id",
+      cause:
+        "Error updating this user, check all the fields that you want to change or look the id",
+      message:
+        "Error updating this user, check all the fields that you want to change or look the id",
       code: EErros.DATABASES_READ_ERROR,
     });
   }
@@ -116,9 +118,10 @@ export const userSession = async (req, res) => {
       cause: "Error looking the session of this user.",
       message: "Error looking the session of this user.",
       code: EErros.DATABASES_READ_ERROR,
-    });;
+    });
   }
 };
+
 export const userLogout = async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -126,4 +129,15 @@ export const userLogout = async (req, res) => {
     }
     return res.redirect("/login");
   });
+};
+
+export const changeToPremium = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const user = await userService.toPremium(userId);
+    req.session.user.premium = user.premium;
+    res.status(200).json(user);
+  } catch (e) {
+    throw new Error("Cant switch to premium");
+  }
 };

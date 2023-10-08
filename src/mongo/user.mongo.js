@@ -18,7 +18,19 @@ class UserMongo {
     const users = await UserModel.find({});
     return users;
   }
-
+  async getUserId(_id) {
+    try {
+      const user = await UserModel.findOne({ _id });
+      return user;
+    } catch (e) {
+      CustomError.createError({
+        name: "ERROR-FIND",
+        cause: "Cant found the user in the db",
+        message: "Cant found the user in the db",
+        code: EErros.INVALID_TYPES_ERROR,
+      });
+    }
+  }
   async getOne(email, password) {
     try {
       const foundUser = await UserModel.findOne({ email });
@@ -73,20 +85,20 @@ class UserMongo {
     return deleted;
   }
 
-  async updateOne(_id, firstName, lastName, email) {
-    if (!_id)
+  async updateUser(_id, user) {
+    try {
+      const userUpdated = await userModel.findByIdAndUpdate(_id, user, {
+        new: true,
+      });
+      return userUpdated;
+    } catch (e) {
       throw CustomError.createError({
         name: "ERROR-UPDATE",
-        cause: "Id not found",
-        message: "The id not found to update this user",
+        cause: "Id user not found",
+        message: "The id not found to update this user cart",
         code: EErros.INVALID_TYPES_ERROR,
       });
-    this.validateUser(firstName, lastName, email);
-    const userUptaded = await UserModel.updateOne(
-      { _id: id },
-      { firstName, lastName, email }
-    );
-    return userUptaded;
+    }
   }
   async updateUserCart(userId, cartId) {
     try {

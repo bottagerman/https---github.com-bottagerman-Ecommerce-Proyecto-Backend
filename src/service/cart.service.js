@@ -3,6 +3,7 @@ import { ProductManagerMongo } from "../mongo/products.mongo.js";
 import { TicketService } from "./ticket.service.js";
 import CustomError from "./error/customErrors.js";
 import EErros from "./error/enums.js";
+import { loggerDev } from "../utils/logger.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
@@ -12,14 +13,6 @@ export class CartService {
     try {
       const cart = await cartManagerMongo.getCartId(cid);
       const product = await productManagerMongo.getProductById(pid);
-
-      if (!cart) {
-        throw new Error("Cart not found");
-      }
-      if (!product) {
-        throw new Error("Product not found");
-      }
-
       const existingProduct = cart.products.find(
         (item) => item.product.toString() === product._id.toString()
       );
@@ -39,6 +32,7 @@ export class CartService {
       );
 
       return { cart: updatedCart, cartQuantity };
+
     } catch (e) {
       CustomError.createError({
         name: "ERROR-MONGO",
@@ -82,5 +76,35 @@ export class CartService {
       throw new Error("Cart not found");
     }
     return cart;
+  }
+
+  async deleteProduct(cid, pid) {
+    try {
+      const cart = await cartManagerMongo.getCartId(cid);
+      if (!cart) {
+        throw new Error("cart not found");
+      }
+      const product = cart.products
+        .map((product) => product.product.toString())
+        .indexOf(pid);
+
+      if (product !== -1) {
+        cart.products.splice(product, 1);
+      } else {
+        loggerDev.error("Product not found");
+      }
+      const updatedCart = await cartManagerMongo.deleteProductFromCart(
+        cid,
+        product
+      );
+      return updatedCart;
+    } catch (error) {
+      CustomError.createError({
+        name: "ERROR-MONGO",
+        cause: "Error deleting this product of cart",
+        message: "Error deleting the product of cart, check out the function",
+        code: EErros.DATABASES_CONNECTION_ERROR,
+      });
+    }
   }
 }

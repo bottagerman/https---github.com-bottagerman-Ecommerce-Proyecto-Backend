@@ -30,7 +30,7 @@ export const getCartById = async (req, res) => {
   try {
     const cartId = req.params.cid;
     const cart = await cartManagerMongo.getCartId(cartId);
-    res.status(200).json({status:true, data: cart});
+    res.status(200).json({ status: "success", data: cart });
   } catch (error) {
     CustomError.createError({
       name: "ERROR-FIND",
@@ -43,18 +43,13 @@ export const getCartById = async (req, res) => {
 
 export const addProductToCart = async (req, res) => {
   try {
-    const {cid, pid} = req.params
+    const { cid, pid } = req.params;
     const cartUpdated = await cartService.addProductToCart(cid, pid);
+
+    loggerDev.info(cartUpdated);
     res.status(200).json({ status: "success", data: cartUpdated });
   } catch (error) {
-    CustomError.createError({
-      name: "ERROR-FIND",
-      cause:
-        "Error adding the product to the cart, check if cid or pid are right!",
-      message:
-        "Error adding the product to the cart, check if cid or pid are right!",
-      code: EErros.DATABASES_READ_ERROR,
-    });
+    res.status(404).json({ error: error.message });
   }
 };
 
@@ -64,26 +59,30 @@ export const readAndRender = async (req, res) => {
     const cart = await cartService.readAndRender(cartId);
     const title = "Products in the cart";
     const { firstName, role, email } = req.session.user;
-    const myCart = cart.products.map(doc => doc.toObject());
-    res.status(200).render("cartProducts", { myCart, cartId, title, firstName, role, email });
+    const myCart = cart.products.map((doc) => doc.toObject());
+    res.status(200).render("cartProducts", {
+      myCart,
+      cartId,
+      title,
+      firstName,
+      role,
+      email,
+    });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
-}
+};
 
 export const removeProductFromCart = async (req, res) => {
   try {
-    const cartId = req.params.cid;
-    const productId = req.params.pid;
+    const { cid, pid } = req.params;
 
-    const updatedCart = await cartService.removeProductFromCart(
-      cartId,
-      productId
-    );
+    const updatedCart = await cartService.deleteProduct(cid, pid);
 
+    loggerDev.info(updatedCart);
     res.status(200).json({
       status: "success",
-      message: "Product removed from cart",
+      message: "product deleted successfully",
       data: updatedCart,
     });
   } catch (error) {
