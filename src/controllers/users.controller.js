@@ -31,6 +31,7 @@ export const createUser = async (req, res) => {
     req.session.lastName = lastName;
     req.session.email = email;
     req.session.admin = false;
+    req.session.premium = false;
     return res.redirect("/login");
   } catch (e) {
     CustomError.createError({
@@ -106,11 +107,36 @@ export const updateUser = async (req, res) => {
 
 export const userSession = async (req, res) => {
   try {
-    let user = new UserDTO(req.session.user);
+    const {
+      firstName,
+      lastName,
+      age,
+      email,
+      admin,
+      premium,
+    } = req.session.user;
+
+    const userData = new UserDTO({
+      firstName,
+      lastName,
+      age,
+      email,
+      admin,
+      premium,
+    });
+
+    const user = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      age: userData.age,
+      email: userData.email,
+      admin: userData.admin,
+      premium: userData.premium,
+    };
     return res.status(200).json({
       status: "success",
       msg: "session data",
-      payload: user,
+      payload: { user: user },
     });
   } catch (e) {
     CustomError.createError({

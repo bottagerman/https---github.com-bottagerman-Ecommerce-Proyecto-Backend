@@ -69,6 +69,7 @@ class UserMongo {
         email,
         password: createHash(password),
         admin: false,
+        premium: false,
       });
     } catch (e) {
       throw CustomError.createError({

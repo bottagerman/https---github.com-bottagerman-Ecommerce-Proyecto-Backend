@@ -12,7 +12,6 @@ export class UserService {
         age,
         email,
         password,
-        premium
       );
 
       return newUser;
