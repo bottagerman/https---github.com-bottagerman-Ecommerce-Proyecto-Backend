@@ -2,6 +2,7 @@ import express from "express";
 import { checkAdmin, checkUser } from "../middlewares/auth.js";
 import * as UserController from "../controllers/users.controller.js";
 import * as ProductsController from "../controllers/products.controller.js";
+import { loggerDev } from "../utils/logger.js";
 export const routerViews = express.Router();
 
 routerViews.get("/", (req, res) => {
@@ -32,5 +33,6 @@ routerViews.get("/only-admin", checkAdmin, async (req, res) => {
     firstName: req.session.user.firstName,
     rol: req.session.user.admin,
   };
-  res.render("adminPage", admin);
+  const productId = req.body.pid;
+  res.render("adminPage", { admin, productId });
 });

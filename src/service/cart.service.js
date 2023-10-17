@@ -25,21 +25,15 @@ export class CartService {
 
       await cart.save();
 
-      const updatedCart = await this.getCartId(cid);
+      const updatedCart = await cartManagerMongo.getCartId(cid);
       const cartQuantity = updatedCart.products.reduce(
         (total, product) => total + product.quantity,
         0
       );
 
       return { cart: updatedCart, cartQuantity };
-
-    } catch (e) {
-      CustomError.createError({
-        name: "ERROR-MONGO",
-        cause: "Error adding the product to cart",
-        message: "Error adding the product to cart, check out the function",
-        code: EErros.DATABASES_CONNECTION_ERROR,
-      });
+    } catch (error) {
+      throw new Error("Can't add the product to the cart");
     }
   }
   async purchase(cartId, userId) {
