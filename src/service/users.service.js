@@ -1,4 +1,6 @@
+import UserDTO from "../DTO/users.dto.js";
 import { userModel } from "../mongo/user.mongo.js";
+import { loggerDev } from "../utils/logger.js";
 import CustomError from "./error/customErrors.js";
 import EErros from "./error/enums.js";
 //import { userModel } from "../DAO/memory/users.memory.js";
@@ -11,7 +13,7 @@ export class UserService {
         lastName,
         age,
         email,
-        password,
+        password
       );
 
       return newUser;
@@ -22,6 +24,14 @@ export class UserService {
         message: "Error creating user, complete all the fields",
         code: EErros.INVALID_TYPES_ERROR,
       });
+    }
+  }
+  async getAll() {
+    try {
+      const allUsers = await userModel.getAll();
+      return allUsers;
+    } catch (e) {
+      throw new Error("Can't get all the users");
     }
   }
   async getUserId(_id) {
@@ -37,8 +47,8 @@ export class UserService {
       });
     }
   }
-  async updatedUser(_id, user) {
-    const userUpdated = await userModel.updateUser(_id, user);
+  async updatedUser(id, user) {
+    const userUpdated = await userModel.updateUser(id, user);
     return userUpdated;
   }
   async findAUser(email, password) {
@@ -54,15 +64,15 @@ export class UserService {
       });
     }
   }
-  async toPremium(_id) {
+  async toPremium(id) {
     try {
-      const user = await this.getUserId({ _id });
+      const user = await this.getUserId({ id });
       if (!user) {
         throw new Error("cant find this user");
       }
       user.premium = !user.premium;
 
-      const premiumUser = await this.updatedUser(_id, {
+      const premiumUser = await this.updatedUser(id, {
         premium: user.premium,
       });
       return premiumUser;

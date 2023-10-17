@@ -2,6 +2,8 @@ import UserDTO from "../DTO/users.dto.js";
 import { UserService } from "../service/users.service.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
+import { Logger } from "winston";
+import { loggerDev } from "../utils/logger.js";
 
 //const userController = new UserMongo();
 const userService = new UserService();
@@ -21,6 +23,18 @@ export const getAllUsers = async (req, res) => {
       message: "Error getting all the users",
       code: EErros.DATABASES_READ_ERROR,
     });
+  }
+};
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userService.getUserId(id);
+    loggerDev.info(user)
+    return res
+      .status(200)
+      .json({ status: "success", msg: "user found", data: {user} });
+  } catch (e) {
+    throw new Error("cant find the user, check the id");
   }
 };
 export const createUser = async (req, res) => {
@@ -159,10 +173,12 @@ export const userLogout = async (req, res) => {
 
 export const changeToPremium = async (req, res) => {
   try {
-    const userId = req.params.uid;
-    const user = await userService.toPremium(userId);
+    const { uid } = req.params.uid;
+    const user = await userService.toPremium(uid);
     req.session.user.premium = user.premium;
-    res.status(200).json(user);
+    res
+      .status(200)
+      .json({ status: "success", msg: "changed to premium!", data: user });
   } catch (e) {
     throw new Error("Cant switch to premium");
   }

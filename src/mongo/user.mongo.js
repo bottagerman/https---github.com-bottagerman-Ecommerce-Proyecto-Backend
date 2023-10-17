@@ -101,10 +101,10 @@ class UserMongo {
       });
     }
   }
-  async updateUserCart(userId, cartId) {
+  async updateUserCart(uid, cartId) {
     try {
       const updatedUser = await UserModel.findByIdAndUpdate(
-        userId,
+        uid,
         { cart: cartId },
         { new: true }
       );

@@ -1,6 +1,6 @@
-import { TicketService } from "../service/ticket.service";
-import { CartService } from "../service/cart.service";
-import { loggerDev } from "../utils/logger";
+import { TicketService } from "../service/ticket.service.js";
+import { CartService } from "../service/cart.service.js";
+import { loggerDev } from "../utils/logger.js";
 
 const cartService = new CartService();
 const ticketService = new TicketService();
