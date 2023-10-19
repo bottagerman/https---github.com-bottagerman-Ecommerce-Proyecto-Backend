@@ -1,5 +1,5 @@
 import express from "express";
-import { checkAdmin, checkUser } from "../middlewares/auth.js";
+import { checkPremium, checkRoll, checkUser } from "../middlewares/auth.js";
 import * as UserController from "../controllers/users.controller.js";
 import * as ProductsController from "../controllers/products.controller.js";
 import { loggerDev } from "../utils/logger.js";
@@ -28,11 +28,24 @@ routerViews.get("/profile", checkUser, (req, res) => {
   res.render("profile", user);
 });
 
-routerViews.get("/only-admin", checkAdmin, async (req, res) => {
+routerViews.get("/only-admin", checkRoll, (req, res) => {
   const admin = {
     firstName: req.session.user.firstName,
     rol: req.session.user.admin,
   };
-  const productId = req.body.pid;
-  res.render("adminPage", { admin, productId });
+
+  const { pid } = req.body;
+
+  res.render("adminPage", { admin, pid });
+});
+
+routerViews.get("/only-premium", checkPremium, (req, res) => {
+  const premium = {
+    firstName: req.session.user.firstName,
+    rol: req.session.user.premium,
+  };
+
+  const { pid } = req.body;
+
+  res.render("premiumPage", { premium, pid });
 });

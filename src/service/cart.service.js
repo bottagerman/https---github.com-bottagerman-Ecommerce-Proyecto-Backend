@@ -9,6 +9,22 @@ const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 const ticketService = new TicketService();
 export class CartService {
+  async createCart(){
+    try{
+      const cart = await cartManagerMongo.createCart()
+      return cart
+    }catch(e){
+      throw new Error ("Cant create the cart")
+    }
+  }
+  async getCartId(cid){
+    try{
+      const userCart = await cartManagerMongo.getCartId(cid)
+      return userCart 
+    }catch(e){
+      throw new Error ("Cant find this cart, check the id")
+    }
+  }
   async addProductToCart(cid, pid) {
     try {
       const cart = await cartManagerMongo.getCartId(cid);

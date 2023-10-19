@@ -9,11 +9,10 @@ import { ProductManagerMongo } from "../mongo/products.mongo.js";
 
 const cartManagerMongo = new CartManagerMongo();
 const cartService = new CartService();
-const productManagerMongo = new ProductManagerMongo();
 
 export const createCart = async (req, res) => {
   try {
-    const userCart = await cartManagerMongo.createCart();
+    const userCart = await cartService.createCart();
     loggerDev.info(userCart._id.toString());
     req.session.user.cart = userCart._id;
     res.redirect(`/views/carts/${userCart._id}`);
@@ -28,8 +27,8 @@ export const createCart = async (req, res) => {
 
 export const getCartById = async (req, res) => {
   try {
-    const cartId = req.params.cid;
-    const cart = await cartManagerMongo.getCartId(cartId);
+    const {cid} = req.params;
+    const cart = await cartService.getCartId(cid);
     res.status(200).json({ status: "success", data: cart });
   } catch (error) {
     CustomError.createError({

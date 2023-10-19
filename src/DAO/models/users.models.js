@@ -28,7 +28,7 @@ const schema = new Schema({
   },
   premium:{
     type: Boolean,
-    default: "user",
+    default: false,
   },
   cart: {
     type: String,

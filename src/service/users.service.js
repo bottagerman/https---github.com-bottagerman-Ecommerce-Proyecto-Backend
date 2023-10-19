@@ -47,9 +47,13 @@ export class UserService {
       });
     }
   }
-  async updatedUser(id, user) {
-    const userUpdated = await userModel.updateUser(id, user);
-    return userUpdated;
+  async updatedUser(_id, user) {
+    try {
+      const userUpdated = await userModel.updateUser(_id, user);
+      return userUpdated;
+    } catch (e) {
+      throw new Error("Cant update this user");
+    }
   }
   async findAUser(email, password) {
     try {
@@ -64,15 +68,15 @@ export class UserService {
       });
     }
   }
-  async toPremium(id) {
+  async toPremium(_id) {
     try {
-      const user = await this.getUserId({ id });
+      const user = await this.getUserId({ _id });
       if (!user) {
         throw new Error("cant find this user");
       }
       user.premium = !user.premium;
 
-      const premiumUser = await this.updatedUser(id, {
+      const premiumUser = await this.updatedUser(_id, {
         premium: user.premium,
       });
       return premiumUser;

@@ -29,10 +29,10 @@ export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await userService.getUserId(id);
-    loggerDev.info(user)
+    loggerDev.info(user);
     return res
       .status(200)
-      .json({ status: "success", msg: "user found", data: {user} });
+      .json({ status: "success", msg: "user found", data: { user } });
   } catch (e) {
     throw new Error("cant find the user, check the id");
   }
@@ -96,7 +96,7 @@ export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { firstName, lastName, email } = req.body;
-    const updatedUser = await userController.updateOne(
+    const updatedUser = await userService.updatedUser(
       id,
       firstName,
       lastName,
@@ -173,12 +173,12 @@ export const userLogout = async (req, res) => {
 
 export const changeToPremium = async (req, res) => {
   try {
-    const { uid } = req.params.uid;
-    const user = await userService.toPremium(uid);
+    const { _id } = req.params;
+    const user = await userService.toPremium(_id);
     req.session.user.premium = user.premium;
-    res
+    return res
       .status(200)
-      .json({ status: "success", msg: "changed to premium!", data: user });
+      .json({ status: "success", msg: "changed to premium!", data: {user} });
   } catch (e) {
     throw new Error("Cant switch to premium");
   }

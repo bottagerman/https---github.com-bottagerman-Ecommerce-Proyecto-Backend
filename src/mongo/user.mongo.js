@@ -37,8 +37,11 @@ class UserMongo {
       if (foundUser && isValidPassword(foundUser, password)) {
         return {
           firstName: foundUser.firstName,
+          lastName: foundUser.lastName,
+          premium: foundUser.premium,
           email: foundUser.email,
           admin: foundUser.admin,
+          cart: foundUser.cart,
           _id: foundUser._id.toString(),
         };
       } else {

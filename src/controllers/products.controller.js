@@ -1,9 +1,9 @@
-import { ProductManagerMongo } from "../mongo/products.mongo.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
 import { CartManagerMongo } from "../mongo/cart.mongo.js";
+import { ProductService } from "../service/products.service.js";
 
-const productService = new ProductManagerMongo();
+const productService = new ProductService();
 const cartService = new CartManagerMongo();
 
 export const getProductById = async (req, res) => {
@@ -26,7 +26,7 @@ export const getProductById = async (req, res) => {
 };
 export const getProducts = async (req, res) => {
   try {
-    const product = await productService.getProducts();
+    const product = await productService.getAllProducts();
     return res.status(200).json({
       status: "success",
       msg: "product list",
@@ -45,7 +45,7 @@ export const getProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const newProduct = req.body;
-    const addedProduct = await productService.addProduct(newProduct);
+    const addedProduct = await productService.createNewProduct(newProduct);
     return res.status(201).json({
       status: "success",
       msg: "product created",
@@ -63,8 +63,8 @@ export const createProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const { pid } = req.params.pid;
-    await productService.deleteProduct(pid);
+    const { id } = req.params.id;
+    await productService.deleteProduct(id);
     return res.status(200).json({
       status: "success",
       msg: "product deleted",

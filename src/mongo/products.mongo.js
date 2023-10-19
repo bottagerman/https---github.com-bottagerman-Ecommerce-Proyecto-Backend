@@ -173,7 +173,8 @@ export class ProductManagerMongo {
           reject(
             CustomError.createError({
               name: "ERROR-UPDATE",
-              cause: "Check out the fields that you want to change, theres something wrong",
+              cause:
+                "Check out the fields that you want to change, theres something wrong",
               message: "Check the fields",
               code: EErros.INVALID_TYPES_ERROR,
             })
@@ -187,21 +188,25 @@ export class ProductManagerMongo {
           if (result) {
             resolve(result);
           } else {
-            reject(   CustomError.createError({
-            name: "ERROR-FIND",
-            cause: "Error finding and updating the product",
-            message: "Error finding the product, check the code please",
-            code: EErros.INVALID_TYPES_ERROR,
-          }));
+            reject(
+              CustomError.createError({
+                name: "ERROR-FIND",
+                cause: "Error finding and updating the product",
+                message: "Error finding the product, check the code please",
+                code: EErros.INVALID_TYPES_ERROR,
+              })
+            );
           }
         })
         .catch((e) => {
-          reject(CustomError.createError({
-            name: "ERROR-FIND",
-            cause: "Error finding and updating the product",
-            message: "Error finding the product, check the code please",
-            code: EErros.INVALID_TYPES_ERROR,
-          }));
+          reject(
+            CustomError.createError({
+              name: "ERROR-FIND",
+              cause: "Error finding and updating the product",
+              message: "Error finding the product, check the code please",
+              code: EErros.INVALID_TYPES_ERROR,
+            })
+          );
         });
     });
   }
@@ -214,12 +219,14 @@ export class ProductManagerMongo {
           resolve(result);
         })
         .catch((e) => {
-          reject(CustomError.createError({
-            name: "ERROR-DELETE",
-            cause: "You cant delete the product.",
-            message: "Cant delete the product.",
-            code: EErros.INVALID_TYPES_ERROR,
-          }));
+          reject(
+            CustomError.createError({
+              name: "ERROR-DELETE",
+              cause: "You cant delete the product.",
+              message: "Cant delete the product.",
+              code: EErros.INVALID_TYPES_ERROR,
+            })
+          );
         });
     });
   }
