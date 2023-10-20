@@ -1,17 +1,27 @@
-
-<h1>HEY! {{firstName}} Welcome to Signature guitar shop!</h1>
-<form action="/views/products" method="GET">
-<button >
- <a style="text-decoration: none;" >
- PRODUCT LIST!
- </a>
- </button>
-</form>
- <form action='/api/carts/' method='POST'>
-<button type="submit">
-<a style="text-decoration: none;">CART</a>
-</button>
- </form>
-<button>
-<a style="text-decoration: none;" href='/logout'>LOGOUT</a>
-</button>
+<div class="bg-image">
+    <h1 class="title-profile">HEY! {{firstName}} Welcome to Signature guitar shop!</h1>
+    <div class="btn-profile">
+    <form action="/views/products" method="GET">
+        <button class="btn btn-warning" style="color: black; font-weight:bold; margin-right: 20px">
+            <a style="text-decoration: none;" >
+            PRODUCT LIST!
+            </a>
+        </button>
+    </form>
+    <form action='/api/carts/' method='POST'>
+        <button type="submit" class="btn btn-primary" style="color: black; font-weight:bold; margin-right: 20px">
+            <a style="text-decoration: none;">CART</a>
+        </button>
+    </form>
+        <button class="btn btn-danger" style="font-weight:bold; text-decoration:none">
+            <a style="text-decoration: none; color: black;" href='/logout'>LOGOUT</a>
+        </button>
+    </div>
+    <main>
+        <section class="main">
+            <p style="color:black; font-weight:bold;">
+                "Welcome to our premier e-commerce platform, the ultimate destination for music enthusiasts and aspiring rockstars. Our online store is a haven for guitar and bass aficionados, showcasing an exclusive collection of signature instruments endorsed by the legendary icons of rock. Explore our extensive range of meticulously crafted guitars and basses, each intricately designed to reflect the unique styles and sounds of renowned rock idols. Discover an unparalleled selection, from the thunderous riffs of electric guitars to the resonating depths of bass guitars, all meticulously curated to capture the essence of the rock 'n' roll spirit. Immerse yourself in the world of musical excellence, where every strum and pluck resonates with the rich history and innovation of rock music. Unleash your inner rockstar with our top-notch collection of guitars and basses, and embrace the spirit of iconic musicians who have shaped the landscape of rock music for generations."
+            </p>
+        </section>
+    </main>
+</div>

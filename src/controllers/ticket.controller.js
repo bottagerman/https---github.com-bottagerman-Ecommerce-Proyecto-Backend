@@ -1,16 +1,33 @@
 import { TicketService } from "../service/ticket.service.js";
 import { CartService } from "../service/cart.service.js";
 import { loggerDev } from "../utils/logger.js";
+import { transport } from "../utils/connections.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const cartService = new CartService();
 const ticketService = new TicketService();
 
 export const purchaseCart = async (req, res) => {
   try {
-    const cid = req.session.user.cart; // Obtén el ID del carrito actual
-    const uid = req.session.user._id; // Obtén el ID del usuario actual
+    const cid = req.session.user.cart; // ID del carrito actual
+    const uid = req.session.user._id; // ID del usuario actual
+    const email = req.session.user.email; // EMAIL del usuario
+
+    loggerDev.info(email);
 
     const ticket = await cartService.purchase(cid, uid);
+
+    const confirm = await transport.sendMail({
+      from: process.env.GOOGLE_EMAIL,
+      to: email,
+      subject: "Compra realizada con exito!",
+      html: `<div>
+      <h1>Este mail fue enviado desde GB Signature Guitars</h1>
+      <p>Muchas gracias por su compra! este es su ticket: ${ticket}</p>
+        </div>`,
+    }); //Envia un email para confirmar la compra con informacion del ticket 
+    loggerDev.info(confirm);
     return res.status(200).render("purchaseTicket", {
       ticket: {
         _id: ticket._id,

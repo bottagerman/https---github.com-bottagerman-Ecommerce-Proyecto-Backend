@@ -1,11 +1,51 @@
 .title {
-    color: rgb(222, 151, 151);
+  color: rgb(222, 151, 151);
 }
-.bg-image{
-    background-image: url(./img/fondo-guitars.jpg);
-    height: 100vh;
-    background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
+.title-cart {
+  background-color: rgba(106, 105, 105, 70%);
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+.title-profile {
+  background-color: rgba(106, 105, 105, 70%);
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+.bg-image {
+  background-image: url(./img/fondo-guitars.jpg);
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-attachment: fixed;
+}
+.bg-products {
+  background-image: url(./img/fondo-guitars.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-attachment: fixed;
+}
+.card {
+  border: 10px, solid, red;
+  margin: 20px 20px;
+  padding: 10px 10px;
+  width: fit-content;
+}
+.btn-display {
+  display: flex;
+  margin-left: 20px;
+
+}
+.btn-profile {
+  display: flex;
+  margin-left: 20px;
+  justify-content: center;
+}
+.main{
+    border: 10px, solid, red;
+    margin: 20px 20px;
+    padding: 10px 10px;
+    width: fit-content;
+    background-color: rgba(222, 151, 151, 50%);
 }

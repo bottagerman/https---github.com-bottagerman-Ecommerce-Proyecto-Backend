@@ -1,6 +1,10 @@
 import { connect } from "mongoose";
 import CustomError from "../service/error/customErrors.js";
 import EErros from "../service/error/enums.js";
+import nodemailer from "nodemailer"
+import dotenv from "dotenv"
+dotenv.config()
+
 export async function connectMongo() {
   try {
     await connect(
@@ -16,3 +20,12 @@ export async function connectMongo() {
   })
   }
 }
+
+export const transport = nodemailer.createTransport({
+  service: "gmail",
+  port: 8080,
+  auth:{
+    user: process.env.GOOGLE_EMAIL,
+    pass: process.env.GOOGLE_PASS,
+  },
+})

@@ -137,7 +137,7 @@ export class CartService {
       }
       const updatedCart = await cartManagerMongo.deleteProductFromCart(
         cid,
-        product
+        pid
       );
       return updatedCart;
     } catch (error) {

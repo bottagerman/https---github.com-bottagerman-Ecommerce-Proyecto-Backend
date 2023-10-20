@@ -1,23 +1,25 @@
+<div class="bg-image">
 {{#if ticket}}
-<h1>Your ticket! {{ticket._id}}</h1>
-<h2>Thanks for your purchase!</h2>
-<div>
-    <li>
-        <ul>
+<h1 class="title-profile">Your ticket! {{ticket._id}}</h1>
+<h2 class="title-profile">Thanks for your purchase!</h2>
+<div class="card">
+    <li style="list-style: none;">
+        <ul style="font-weight: bold; ">
            code: {{ticket.code}}
         </ul>
-        <ul>
+        <ul style="font-weight: bold; " >
             date: {{ticket.date_time}}
         </ul>
-        <ul>
+        <ul style="font-weight: bold; ">
             purchaser id: {{ticket.purchaser}}
         </ul>
-        <ul>
+        <ul style="font-weight: bold; ">
             total: {{ticket.amount}}
         </ul>
     </li>
 </div>
 {{/if}}
-<button type="submit">
-<a href="/profile" style="text-decoration:none;">Back to profile</a>
+<button type="submit" class="btn btn-warning">
+<a href="/profile" style="text-decoration: none; color: black; font-weight: bold; margin-left: 20px">Back to profile</a>
 </button>
+</div>

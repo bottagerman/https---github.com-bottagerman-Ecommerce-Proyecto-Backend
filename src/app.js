@@ -19,7 +19,6 @@ import errorHandler from "./middlewares/error.js";
 import { loggerDev } from "./utils/logger.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-import nodemailer from "nodemailer"
 import dotenv from "dotenv"
 import { routerTicket } from "./routes/ticket.router.js";
 
@@ -92,16 +91,6 @@ app.use("/api/tickets", routerTicket)
 app.use("/views/products", routerProductsView);
 app.use("/views/carts", routerCartViews);
 app.use("/", routerViews);
-
-
-const transport = nodemailer.createTransport({
-  service: "gmail",
-  port: 8080,
-  auth:{
-    user: process.env.GOOGLE_EMAIL,
-    pass: process.env.GOOGLE_PASS,
-  },
-})
 
 
 // GLOBAL ENDPOINT

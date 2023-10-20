@@ -16,3 +16,6 @@ error: error al finalizar compra
 error: error al finalizar compra
 error: error al finalizar compra
 error: error al finalizar compra
+error: undefined
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"113"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"113"}}
