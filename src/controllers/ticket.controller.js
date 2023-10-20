@@ -11,15 +11,12 @@ export const purchaseCart = async (req, res) => {
     const uid = req.session.user._id; // Obtén el ID del usuario actual
 
     const ticket = await cartService.purchase(cid, uid);
-    return res.status(200).json({
-      status: "success",
-      msg: "Ticket data",
-      data: {
-        id: ticket._id,
+    return res.status(200).render("purchaseTicket", {
+      ticket: {
+        _id: ticket._id,
         code: ticket.code,
         date_time: ticket.date_time,
         purchaser: ticket.purchaser,
-        products: ticket.products,
         amount: ticket.amount,
       },
     });

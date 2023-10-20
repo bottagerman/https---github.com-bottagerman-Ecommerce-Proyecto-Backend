@@ -1,0 +1,23 @@
+{{#if ticket}}
+<h1>Your ticket! {{ticket._id}}</h1>
+<h2>Thanks for your purchase!</h2>
+<div>
+    <li>
+        <ul>
+           code: {{ticket.code}}
+        </ul>
+        <ul>
+            date: {{ticket.date_time}}
+        </ul>
+        <ul>
+            purchaser id: {{ticket.purchaser}}
+        </ul>
+        <ul>
+            total: {{ticket.amount}}
+        </ul>
+    </li>
+</div>
+{{/if}}
+<button type="submit">
+<a href="/profile" style="text-decoration:none;">Back to profile</a>
+</button>
