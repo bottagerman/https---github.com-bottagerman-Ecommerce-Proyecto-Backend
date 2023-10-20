@@ -103,19 +103,6 @@ const transport = nodemailer.createTransport({
   },
 })
 
-app.get("/mail", async (req, res) =>{
-const result = await transport.sendMail({
-  from: process.env.GOOGLE_EMAIL,
-  to: "aldana-m@live.com, aldana.martinez@davinci.edu.com",
-  subject: "prueba mailing",
-  html: `<div>
-      <h1>Este mail fue enviado desde GB Signature Guitars</h1>
-      <p>Buenos tardes mi amor, ojala que cuando te levantes te sientas mejor, te amo muchisimo <3</p>
-        </div>`
-      });
-  loggerDev.info(result)
-  res.send("Email Sent")
-})
 
 // GLOBAL ENDPOINT
 app.get("*", (req, res) => {

@@ -20,7 +20,7 @@
           Product price: {{this.product.price}}
         </p>
       <form action="/api/carts/{{this._id}}/products/{{this.product._id}}" method="DELETE">
-        <button>
+        <button type="submit">
           delete
         </button>
       </form>
@@ -28,7 +28,7 @@
     </li>
   {{/each}}
       <form action="/api/carts/{{cartId}}/purchase" method="POST">
-        <button>
+        <button type="submit">
           GO TO TICKET
         </button>
       </form>

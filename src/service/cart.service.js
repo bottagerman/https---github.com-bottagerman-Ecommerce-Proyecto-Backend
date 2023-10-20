@@ -9,20 +9,20 @@ const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 const ticketService = new TicketService();
 export class CartService {
-  async createCart(){
-    try{
-      const cart = await cartManagerMongo.createCart()
-      return cart
-    }catch(e){
-      throw new Error ("Cant create the cart")
+  async createCart() {
+    try {
+      const cart = await cartManagerMongo.createCart();
+      return cart;
+    } catch (e) {
+      throw new Error("Cant create the cart");
     }
   }
-  async getCartId(cid){
-    try{
-      const userCart = await cartManagerMongo.getCartId(cid)
-      return userCart 
-    }catch(e){
-      throw new Error ("Cant find this cart, check the id")
+  async getCartId(cid) {
+    try {
+      const userCart = await cartManagerMongo.getCartId(cid);
+      return userCart;
+    } catch (e) {
+      throw new Error("Cant find this cart, check the id");
     }
   }
   async addProductToCart(cid, pid) {
@@ -52,15 +52,17 @@ export class CartService {
       throw new Error("Can't add the product to the cart");
     }
   }
-  async purchase(cartId, userId) {
+  async purchase(cid, uid) {
     try {
-      const cart = await cartManagerMongo.getCartId(cartId);
+      const cart = await this.readAndRender(cid);
+      loggerDev.info(cart);
 
       let totalPrice = 0;
-      for (const product of cart.products) {
-        totalPrice += product.detail.price * product.quantity;
+      for (const products of cart.products) {
+        loggerDev.debug(products.product.price);
+        loggerDev.debug(products.quantity);
+        totalPrice += products.product?.price * products.quantity;
       }
-
       const ticketCode = Math.floor(Math.random() * 900) + 100;
 
       const date_time = Date.now();
@@ -69,10 +71,10 @@ export class CartService {
         code: ticketCode,
         date_time: date_time,
         amount: totalPrice,
-        purchaser: userId,
+        purchaser: uid,
       });
 
-      await cartManagerMongo.deleteAllProductsFromCart(cartId);
+      await cartManagerMongo.deleteAllProductsFromCart(cid);
 
       return ticket;
     } catch (error) {
@@ -80,14 +82,44 @@ export class CartService {
       throw new Error("Error al finalizar la compra");
     }
   }
-  async readAndRender(cartId) {
-    const cart = await cartManagerMongo.readAndRender(cartId);
+  async readAndRender(cid) {
+    const cart = await cartManagerMongo.readAndRender(cid);
     if (!cart) {
       throw new Error("Cart not found");
     }
     return cart;
   }
+  async purchase(cid, uid) {
+    try {
+      const cart = await this.readAndRender(cid);
+      loggerDev.info(cart);
 
+      let totalPrice = 0;
+      for (const products of cart.products) {
+        loggerDev.debug(products.product.price);
+        loggerDev.debug(products.quantity);
+        totalPrice += products.product?.price * products.quantity;
+      }
+      loggerDev.info(totalPrice)
+      const ticketCode = Math.floor(Math.random() * 900) + 100;
+
+      const date_time = Date.now();
+
+      const ticket = await ticketService.createTicket({
+        code: ticketCode,
+        date_time: date_time,
+        amount: totalPrice,
+        purchaser: uid,
+      });
+
+      await cartManagerMongo.deleteAllProductsFromCart(cid);
+
+      return ticket;
+    } catch (error) {
+      // Maneja los errores apropiadamente
+      throw new Error("Error al finalizar la compra");
+    }
+  }
   async deleteProduct(cid, pid) {
     try {
       const cart = await cartManagerMongo.getCartId(cid);

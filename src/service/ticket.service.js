@@ -1,5 +1,6 @@
 import { productsModel } from "../DAO/models/products.models.js";
 import { ticketModel } from "../DAO/models/ticket.model.js";
+import { loggerDev } from "../utils/logger.js";
 
 export class TicketService {
   async createTicket(ticketData) {
@@ -12,7 +13,8 @@ export class TicketService {
   }
   async getTicketById(tid) {
     try {
-      const ticket = await ticketModel.findOne(tid);
+      const ticket = await ticketModel.findById(tid);
+      loggerDev.debug(ticket)
       return ticket;
     } catch (e) {
       throw new Error("Cant find the ticket");
@@ -26,7 +28,7 @@ export class TicketService {
       throw new Error("There's no tickets");
     }
   }
-  async getTicketAndRender(tickets) {
+  async getTicketAndRender(tid) {
     try {
       const newTicket = [];
 
@@ -48,6 +50,7 @@ export class TicketService {
           amount: ticket.amount,
           products: products,
         });
+        return newTicket
       }
     } catch (e) {
       throw new Error("Can't render the ticket.");

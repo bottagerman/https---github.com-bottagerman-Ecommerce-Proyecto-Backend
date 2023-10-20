@@ -1,13 +1,8 @@
-import { CartManagerMongo } from "../mongo/cart.mongo.js";
-import { userModel } from "../mongo/user.mongo.js";
 import { CartService } from "../service/cart.service.js";
-import * as productController from "../controllers/products.controller.js";
 import EErros from "../service/error/enums.js";
 import CustomError from "../service/error/customErrors.js";
 import { loggerDev } from "../utils/logger.js";
-import { ProductManagerMongo } from "../mongo/products.mongo.js";
 
-const cartManagerMongo = new CartManagerMongo();
 const cartService = new CartService();
 
 export const createCart = async (req, res) => {
@@ -27,7 +22,7 @@ export const createCart = async (req, res) => {
 
 export const getCartById = async (req, res) => {
   try {
-    const {cid} = req.params;
+    const { cid } = req.params;
     const cart = await cartService.getCartId(cid);
     res.status(200).json({ status: "success", data: cart });
   } catch (error) {
@@ -46,7 +41,7 @@ export const addProductToCart = async (req, res) => {
     const cartUpdated = await cartService.addProductToCart(cid, pid);
 
     loggerDev.info(cartUpdated);
-    res.status(200).redirect(`/views/carts/${cid}`)
+    res.status(200).redirect(`/views/carts/${cid}`);
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
@@ -79,11 +74,7 @@ export const removeProductFromCart = async (req, res) => {
     const updatedCart = await cartService.deleteProduct(cid, pid);
 
     loggerDev.info(updatedCart);
-    res.status(200).json({
-      status: "success",
-      message: "product deleted successfully",
-      data: updatedCart,
-    });
+    return res.statuts(200).redirect(`/views/carts/${cid}`);
   } catch (error) {
     CustomError.createError({
       name: "ERROR-DELETE",
