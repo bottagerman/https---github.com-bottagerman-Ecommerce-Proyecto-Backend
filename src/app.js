@@ -19,6 +19,7 @@ import errorHandler from "./middlewares/error.js";
 import { loggerDev } from "./utils/logger.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import nodemailer from "nodemailer"
 import dotenv from "dotenv"
 import { routerTicket } from "./routes/ticket.router.js";
 
@@ -58,8 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://bottagerman:W6CkrlukQm3hzgsn@cluster0.zsm3uly.mongodb.net/coder?authSource=admin&replicaSet=atlas-ptw4gy-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
+      mongoUrl: process.env.MONGO_URL,
       ttl: 86400 * 7,
     }),
     secret: "a-true-secret",
